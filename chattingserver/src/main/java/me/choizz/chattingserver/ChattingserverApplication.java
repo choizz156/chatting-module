@@ -1,13 +1,13 @@
-package me.choizz.chattingwebsocket;
+package me.choizz.chattingserver;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class ChattingWebsocketApplication {
+public class ChattingserverApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(ChattingWebsocketApplication.class, args);
+        SpringApplication.run(ChattingserverApplication.class, args);
     }
 
 }

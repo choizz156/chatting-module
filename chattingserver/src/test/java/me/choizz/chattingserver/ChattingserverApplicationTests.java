@@ -1,10 +1,10 @@
-package me.choizz.chattingapi;
+package me.choizz.chattingserver;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class ChattingApiApplicationTests {
+class ChattingserverApplicationTests {
 
     @Test
     void contextLoads() {
