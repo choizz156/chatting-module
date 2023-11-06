@@ -1,4 +1,4 @@
-package me.choizz.chattingserver.config.auth;
+package me.choizz.chattingserver.auth.config;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;

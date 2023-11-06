@@ -1,4 +1,4 @@
-package me.choizz.chattingserver.global.exception;
+package me.choizz.chattingserver.api.exception;
 
 public class BusinessLoginException extends RuntimeException {
 

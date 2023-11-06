@@ -1,4 +1,4 @@
-package me.choizz.chattingserver.global.exception;
+package me.choizz.chattingserver.api.exception;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

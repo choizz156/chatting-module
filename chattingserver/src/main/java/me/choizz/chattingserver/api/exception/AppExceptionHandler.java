@@ -1,4 +1,4 @@
-package me.choizz.chattingserver.global.exception;
+package me.choizz.chattingserver.api.exception;
 
 import lombok.extern.slf4j.Slf4j;
 import me.choizz.chattingserver.api.ApiResponseDto;
