@@ -1,7 +1,7 @@
 package me.choizz.chattingserver.auth.dto;
 
 import lombok.Builder;
-import me.choizz.chattingserver.domain.user.entity.UserRole;
+import me.choizz.chattingserver.domain.user.UserRole;
 
 public record UserAttribute(String email, String password, String nickname, UserRole userRole) {
 

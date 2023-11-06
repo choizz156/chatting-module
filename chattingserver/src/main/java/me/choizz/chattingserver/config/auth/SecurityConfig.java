@@ -8,6 +8,8 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer.FrameOptionsConfig;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.crypto.factory.PasswordEncoderFactories;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
 @RequiredArgsConstructor
@@ -28,10 +30,10 @@ public class SecurityConfig {
         http.
             formLogin(form -> {
                     form.loginProcessingUrl("users/auth");
-                    form.loginPage("http://localhost:8080/login-form");
-                    form.failureForwardUrl("http://localhost:8080/login-form");
-                    form.successForwardUrl("http://localhost:8080");
-                    form.failureForwardUrl("http://localhost:8080/login-form");
+                    form.loginPage("/login-form");
+                    form.failureForwardUrl("/login-form");
+                    form.successForwardUrl("/");
+                    form.failureForwardUrl("/login-form");
                 }
             )
             .logout(logout -> logout.logoutSuccessUrl("/"));
@@ -43,6 +45,11 @@ public class SecurityConfig {
             authorizeHttpRequests(auth -> auth.anyRequest().permitAll());
 
         return http.build();
+    }
+
+    @Bean
+    public PasswordEncoder passwordEncoder(){
+        return PasswordEncoderFactories.createDelegatingPasswordEncoder();
     }
 
 }

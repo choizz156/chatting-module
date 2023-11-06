@@ -1,8 +1,7 @@
-package me.choizz.chattingserver.domain.user.entity;
+package me.choizz.chattingserver.domain.user;
 
 import static jakarta.persistence.EnumType.STRING;
 import static jakarta.persistence.GenerationType.IDENTITY;
-import static lombok.AccessLevel.PROTECTED;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -10,14 +9,16 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import me.choizz.chattingserver.domain.BaseEntity;
 
 @Getter
-@NoArgsConstructor(access = PROTECTED)
+@NoArgsConstructor
 @Entity
 @Table(name = "users")
-public class User {
+public class User extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = IDENTITY)
@@ -33,4 +34,14 @@ public class User {
     @Enumerated(STRING)
     private UserRole roles = UserRole.USER;
 
+    @Builder
+    public User(final String email, final String password, final String nickname) {
+        this.email = email;
+        this.password = password;
+        this.nickname = nickname;
+    }
+
+    public void savePwd(final String pwd) {
+        this.password = pwd;
+    }
 }
