@@ -16,4 +16,14 @@ public class ChatRoomMapRepository implements ChatRoomRepository {
     public ChatRoom save(final ChatRoom chatRoom) {
         return store.put(sequence.getAndIncrement(), chatRoom);
     }
+
+    @Override
+    public void delete() {
+        store.clear();
+    }
+
+    @Override
+    public ChatRoom findById(final Long id) {
+        return store.get(id);
+    }
 }

@@ -7,4 +7,8 @@ public interface ChatRoomRepository {
 
     ChatRoom save(ChatRoom chatRoom);
 
+    void delete();
+
+    ChatRoom findById(Long id);
+
 }
