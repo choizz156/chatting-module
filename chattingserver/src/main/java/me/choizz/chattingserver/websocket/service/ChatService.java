@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import me.choizz.chattingserver.websocket.ChatMessage;
 import me.choizz.chattingserver.websocket.ChatRoom;
-import me.choizz.chattingserver.websocket.dto.ChatInfo;
 import me.choizz.chattingserver.websocket.repository.ChatMessageRepository;
 import me.choizz.chattingserver.websocket.repository.ChatRoomRepository;
 import org.springframework.stereotype.Service;
@@ -22,8 +21,7 @@ public class ChatService {
         return room;
     }
 
-    public void saveMassage(final ChatInfo chatInfo) {
-        ChatMessage chatMessage = chatInfo.toEntity();
+    public void saveMassage(final ChatMessage chatMessage) {
         chatMessageRepository.save(chatMessage);
     }
 }
