@@ -1,10 +1,12 @@
 package me.choizz.chattingserver.auth.config;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer.FrameOptionsConfig;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -18,6 +20,13 @@ import org.springframework.security.web.SecurityFilterChain;
 public class SecurityConfig {
 
     @Bean
+    public WebSecurityCustomizer webSecurityCustomizer() {
+        return web -> web.ignoring()
+            .requestMatchers("/favicon.io")
+            .requestMatchers("/error")
+            .requestMatchers(PathRequest.toH2Console());
+    }
+    @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
             .headers(headers -> headers.frameOptions(FrameOptionsConfig::sameOrigin))
@@ -25,7 +34,8 @@ public class SecurityConfig {
                 session -> session.sessionCreationPolicy(SessionCreationPolicy.ALWAYS)
             )
             .csrf(AbstractHttpConfigurer::disable)
-            .cors(cors -> cors.configurationSource(new CorsConfig().corsFilter()));
+            .cors(cors -> cors.configurationSource(new CorsConfig().corsFilter()))
+            .csrf(AbstractHttpConfigurer::disable);
 
         http.
             formLogin(form -> {
