@@ -1,0 +1,11 @@
+spring:
+  data:
+    mongodb:
+      database: local
+      port: 1111
+      host: localhost
+de:
+  flapdoodle:
+    mongodb:
+      embedded:
+        version: 4.4.18

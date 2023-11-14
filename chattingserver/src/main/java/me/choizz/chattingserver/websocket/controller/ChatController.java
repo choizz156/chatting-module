@@ -36,8 +36,8 @@ public class ChatController {
     @MessageMapping("/chat")
     public void chat(ChatInfo chatInfo) {
         ChatMessage chatMessage = chatInfo.toEntity();
-        chatService.saveMassage(chatMessage);
+        ChatMessage message = chatService.saveMassage(chatMessage);
 
-        operations.convertAndSend("/sub/" + chatInfo.roomId() , chatInfo);
+        operations.convertAndSend("/sub/" + message.getRoomId() , chatInfo);
     }
 }

@@ -7,6 +7,7 @@ import me.choizz.chattingserver.websocket.ChatRoom;
 import me.choizz.chattingserver.websocket.repository.ChatMessageRepository;
 import me.choizz.chattingserver.websocket.repository.ChatRoomRepository;
 import org.springframework.stereotype.Service;
+
 @Slf4j
 @RequiredArgsConstructor
 @Service
@@ -17,11 +18,10 @@ public class ChatService {
 
     public ChatRoom createChatRoom(String name) {
         ChatRoom room = new ChatRoom(name);
-        chatRoomRepository.save(room);
-        return room;
+        return chatRoomRepository.save(room);
     }
 
-    public void saveMassage(final ChatMessage chatMessage) {
-        chatMessageRepository.save(chatMessage);
+    public ChatMessage saveMassage(final ChatMessage chatMessage) {
+        return chatMessageRepository.save(chatMessage);
     }
 }

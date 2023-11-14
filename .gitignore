@@ -372,3 +372,4 @@ gradle-app.setting
 settings.gradle
 HELP.md
 gradlew
+!/docker-compose.yml

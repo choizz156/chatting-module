@@ -27,13 +27,14 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-websocket'
 
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-
+    testImplementation 'de.flapdoodle.embed:de.flapdoodle.embed.mongo.spring31x:4.10.1'
     //rdbms
     runtimeOnly 'com.h2database:h2'
     runtimeOnly 'com.mysql:mysql-connector-j'
 
     //mongodb
-//    implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
+    implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
+
 
     //security
     implementation 'org.springframework.boot:spring-boot-starter-security'
