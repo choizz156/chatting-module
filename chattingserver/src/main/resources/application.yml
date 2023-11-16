@@ -22,6 +22,20 @@ spring:
     url: jdbc:h2:mem:chattest
     driver-class-name: org.h2.Driver
 
+  data:
+    mongodb:
+      database: choizzdb
+      port: 27017
+      host: localhost
+      username: choizz
+      password: choizz
+      authentication-database: admin
+
+
+  session:
+    timeout: 86400
+
   h2:
     console:
       enabled: true
+
