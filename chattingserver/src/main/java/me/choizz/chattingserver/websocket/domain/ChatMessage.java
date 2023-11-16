@@ -2,14 +2,8 @@ package me.choizz.chattingserver.websocket.domain;
 
 import java.time.LocalDateTime;
 import lombok.Builder;
-import lombok.Getter;
 
-@Getter
-public class ChatMessage {
-
-    private String nickname;
-    private String message;
-    private LocalDateTime createdAt;
+public record ChatMessage(String nickname, String message,LocalDateTime createdAt ) {
 
     @Builder
     public ChatMessage(
