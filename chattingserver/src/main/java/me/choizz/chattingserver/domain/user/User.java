@@ -41,7 +41,7 @@ public class User extends BaseEntity {
         this.nickname = nickname;
     }
 
-    public void savePwd(final String pwd) {
-        this.password = pwd;
+    public void savePassword(final String password) {
+        this.password = password;
     }
 }

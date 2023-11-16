@@ -15,7 +15,7 @@ public class ChattingRoom extends BaseEntity{
     private String id;
     private String name;
 
-    private List<ChatMessage> messageList;
+    private List<ChatMessage> messages;
 
     public ChattingRoom(final String name) {
         this.name = name;

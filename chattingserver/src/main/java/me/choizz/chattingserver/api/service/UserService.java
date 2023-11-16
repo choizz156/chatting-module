@@ -3,7 +3,7 @@ package me.choizz.chattingserver.api.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import me.choizz.chattingserver.api.controller.user.dto.JoinDto;
-import me.choizz.chattingserver.api.exception.BusinessLoginException;
+import me.choizz.chattingserver.api.exception.BusinessLogicException;
 import me.choizz.chattingserver.api.exception.ExceptionCode;
 import me.choizz.chattingserver.domain.user.User;
 import me.choizz.chattingserver.domain.user.UserRepository;
@@ -22,28 +22,28 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
 
     public User join(final JoinDto joinDto) {
-        verifyEmail(joinDto.email());
-        verifyNickname(joinDto.nickname());
+        checkDuplicationOfEmail(joinDto.email());
+        checkDuplicationOfNickname(joinDto.nickname());
 
         var user = joinDto.toEntity();
-        var pwd = passwordEncoder.encode(joinDto.password());
+        var password = passwordEncoder.encode(joinDto.password());
 
-        user.savePwd(pwd);
+        user.savePassword(password);
 
         userRepository.save(user);
 
         return user;
     }
 
-    private void verifyNickname(final String nickname) {
+    private void checkDuplicationOfNickname(final String nickname) {
       if(userRepository.existsUserByNickname(nickname)){
-            throw new BusinessLoginException(ExceptionCode.EXIST_NICKNAME);
+            throw new BusinessLogicException(ExceptionCode.EXIST_NICKNAME);
         }
     }
 
-    private void verifyEmail(final String email) {
+    private void checkDuplicationOfEmail(final String email) {
         if(userRepository.existsUserByEmail(email)){
-            throw new BusinessLoginException(ExceptionCode.EXIST_EMAIL);
+            throw new BusinessLogicException(ExceptionCode.EXIST_EMAIL);
         }
     }
 }

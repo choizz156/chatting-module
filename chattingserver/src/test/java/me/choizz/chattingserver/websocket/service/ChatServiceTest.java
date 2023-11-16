@@ -78,7 +78,7 @@ class ChatServiceTest {
 
         //then
         ChattingRoom result = chattingRoomRepository.findAll().get(0);
-        assertThat(result.getMessageList())
+        assertThat(result.getMessages())
             .extracting("nickname", "message", "createdAt")
             .containsAnyOf(
                 tuple("test", "testmsg1", now),

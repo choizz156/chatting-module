@@ -4,12 +4,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatCode;
 
 import me.choizz.chattingserver.api.controller.user.dto.JoinDto;
+import me.choizz.chattingserver.api.exception.BusinessLogicException;
+import me.choizz.chattingserver.api.exception.ExceptionCode;
 import me.choizz.chattingserver.api.service.UserService;
 import me.choizz.chattingserver.domain.user.User;
 import me.choizz.chattingserver.domain.user.UserRepository;
 import me.choizz.chattingserver.domain.user.UserRole;
-import me.choizz.chattingserver.api.exception.BusinessLoginException;
-import me.choizz.chattingserver.api.exception.ExceptionCode;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -62,7 +62,7 @@ class UserServiceTest {
 
         //then
         assertThatCode(() -> userService.join(dto2))
-            .isInstanceOf(BusinessLoginException.class)
+            .isInstanceOf(BusinessLogicException.class)
             .hasMessageContaining(ExceptionCode.EXIST_EMAIL.getMsg());
     }
 
@@ -78,7 +78,7 @@ class UserServiceTest {
 
         //then
         assertThatCode(() -> userService.join(dto2))
-            .isInstanceOf(BusinessLoginException.class)
+            .isInstanceOf(BusinessLogicException.class)
             .hasMessageContaining(ExceptionCode.EXIST_NICKNAME.getMsg());
     }
 
