@@ -3,9 +3,11 @@ package me.choizz.chattingserver.websocket.service;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.groups.Tuple.tuple;
 
+import de.flapdoodle.embed.mongo.spring.autoconfigure.EmbeddedMongoAutoConfiguration;
+import java.time.LocalDateTime;
 import java.util.List;
-import me.choizz.chattingserver.websocket.ChatMessage;
-import me.choizz.chattingserver.websocket.ChatRoom;
+import me.choizz.chattingserver.websocket.domain.ChatMessage;
+import me.choizz.chattingserver.websocket.domain.ChattingRoom;
 import me.choizz.chattingserver.websocket.dto.ChatInfo;
 import me.choizz.chattingserver.websocket.repository.ChatMessageRepository;
 import me.choizz.chattingserver.websocket.repository.ChatRoomRepository;
@@ -14,6 +16,8 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.context.TestConfiguration;
+import org.springframework.context.annotation.Profile;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.test.context.ActiveProfiles;
 
@@ -25,7 +29,7 @@ class ChatServiceTest {
     private ChatMessageRepository chatMessageRepository;
 
     @Autowired
-    private ChatRoomRepository chatRoomRepository;
+    private ChatRoomRepository chattingRoomRepository;
 
     @Autowired
     private ChatService chatService;
@@ -35,50 +39,57 @@ class ChatServiceTest {
 
     @BeforeEach
     void setUpEach() {
-        chatRoomRepository.deleteAll();
-        chatRoomRepository.deleteAll();
+        chattingRoomRepository.deleteAll();
+        chattingRoomRepository.deleteAll();
     }
 
     @DisplayName("채팅룸을 생성한다.")
     @Test
     void chatRoom() throws Exception {
         //given
-        chatService.createChatRoom("testRoom");
+        chatService.createChattingRoom("testRoom");
 
         //when
-        ChatRoom result = chatRoomRepository.findAll().get(0);
+        ChattingRoom result = chattingRoomRepository.findAll().get(0);
 
         //then
         assertThat(result.getName()).isEqualTo("testRoom");
-        assertThat(result.getRoomId()).isNotBlank();
-
+        assertThat(result.getId()).isNotBlank();
+        assertThat(result.getCreatedAt()).isNotNull();
     }
 
     @DisplayName("채팅 내역이 저장된다.")
     @Test
     void msg() throws Exception {
         //given
-        ChatRoom chatRoom = chatService.createChatRoom("roomName");
+        var room = chatService.createChattingRoom("testRoom");
 
-        List<ChatInfo> chatInfos = List.of(
-            new ChatInfo(chatRoom.getRoomId(), "test", "roomName", "testmsg1"),
-            new ChatInfo(chatRoom.getRoomId(),"test", "roomName", "testmsg2"),
-            new ChatInfo(chatRoom.getRoomId(),"test", "roomName", "testmsg3")
+        List<ChatInfo> chatList = List.of(
+            new ChatInfo("test", "testmsg1"),
+            new ChatInfo("test", "testmsg2"),
+            new ChatInfo("test", "testmsg3")
         );
 
-        List<ChatMessage> chatMessageList = chatInfos.stream().map(ChatInfo::toEntity).toList();
+        LocalDateTime now = LocalDateTime.of(2022,11,12,11,11,11);
+        List<ChatMessage> list = chatList.stream().map(m -> m.toEntity(now)).toList();
 
         //when
-        chatMessageList.forEach(c -> chatService.saveMassage(c));
+        list.forEach(c -> chatService.saveMassage(room.getId(), c));
 
         //then
-        List<ChatMessage> result = chatMessageRepository.findAll();
-        assertThat(result)
-            .extracting("nickname", "message", "roomName")
+        ChattingRoom result = chattingRoomRepository.findAll().get(0);
+        assertThat(result.getMessageList())
+            .extracting("nickname", "message", "createdAt")
             .containsAnyOf(
-                tuple("test", "testmsg1", "roomName"),
-                tuple("test", "testmsg2", "roomName"),
-                tuple("test", "testmsg3", "roomName")
+                tuple("test", "testmsg1", now),
+                tuple("test", "testmsg2", now),
+                tuple("test", "testmsg3", now)
             );
+    }
+
+
+    @Profile("test")
+    @TestConfiguration
+    static class EmbeddedAutoConfig extends EmbeddedMongoAutoConfiguration {
     }
 }

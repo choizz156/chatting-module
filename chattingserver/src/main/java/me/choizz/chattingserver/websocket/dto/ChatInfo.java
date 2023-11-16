@@ -1,18 +1,18 @@
 package me.choizz.chattingserver.websocket.dto;
 
 import jakarta.validation.constraints.NotEmpty;
+import java.time.LocalDateTime;
 import lombok.Builder;
-import me.choizz.chattingserver.websocket.ChatMessage;
+import me.choizz.chattingserver.websocket.domain.ChatMessage;
 
 @Builder
-public record ChatInfo(@NotEmpty String roomId, @NotEmpty String nickname, @NotEmpty String roomName, @NotEmpty String msg) {
+public record ChatInfo(@NotEmpty String nickname, @NotEmpty String msg) {
 
-    public ChatMessage toEntity() {
+    public ChatMessage toEntity(LocalDateTime createTime) {
         return ChatMessage.builder()
-            .roomId(roomId())
             .message(msg())
-            .roomName(roomName().isEmpty() ? nickname() :roomName())
             .nickname(nickname())
+            .createdAt(createTime)
             .build();
     }
 

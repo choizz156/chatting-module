@@ -1,19 +1,23 @@
-package me.choizz.chattingserver.websocket;
+package me.choizz.chattingserver.websocket.domain;
 
+import java.util.List;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-@Document
+@Document("chat_room")
 @Getter
-public class ChatRoom {
+@NoArgsConstructor
+public class ChattingRoom extends BaseEntity{
 
     @Id
-    private String roomId;
-//    private String roomId = createId();
+    private String id;
     private String name;
 
-    public ChatRoom(final String name) {
+    private List<ChatMessage> messageList;
+
+    public ChattingRoom(final String name) {
         this.name = name;
     }
 
