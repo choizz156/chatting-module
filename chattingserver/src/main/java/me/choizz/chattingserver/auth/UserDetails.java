@@ -1,10 +1,12 @@
 package me.choizz.chattingserver.auth;
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.User;
 
 @Getter
+@EqualsAndHashCode(callSuper = false)
 public class UserDetails extends User {
 
     private final Long userId;
