@@ -1,4 +1,4 @@
-package me.choizz.chattingserver.api.user;
+package me.choizz.chattingserver.user;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatCode;
