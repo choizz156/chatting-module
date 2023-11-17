@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import me.choizz.chattingserver.api.ApiResponseDto;
 import me.choizz.chattingserver.api.controller.user.dto.JoinDto;
-import me.choizz.chattingserver.api.service.UserService;
+import me.choizz.chattingserver.api.service.user.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

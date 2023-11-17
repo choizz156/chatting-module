@@ -5,7 +5,7 @@ import lombok.Getter;
 import org.springframework.data.annotation.CreatedDate;
 
 @Getter
-public abstract class BaseEntity {
+public abstract class BaseMongoEntity {
 
     @CreatedDate
     LocalDateTime createdAt;

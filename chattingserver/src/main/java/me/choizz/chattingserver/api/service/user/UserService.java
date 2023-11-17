@@ -1,4 +1,4 @@
-package me.choizz.chattingserver.api.service;
+package me.choizz.chattingserver.api.service.user;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,7 +25,7 @@ public class UserService {
         checkDuplicationOfEmail(joinDto.email());
         checkDuplicationOfNickname(joinDto.nickname());
 
-        var user = joinDto.toEntity();
+        User user = joinDto.toEntity();
         var password = passwordEncoder.encode(joinDto.password());
 
         user.savePassword(password);
