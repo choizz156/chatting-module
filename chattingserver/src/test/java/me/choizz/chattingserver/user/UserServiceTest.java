@@ -6,7 +6,7 @@ import static org.assertj.core.api.Assertions.assertThatCode;
 import me.choizz.chattingserver.api.controller.user.dto.JoinDto;
 import me.choizz.chattingserver.api.exception.BusinessLogicException;
 import me.choizz.chattingserver.api.exception.ExceptionCode;
-import me.choizz.chattingserver.api.service.UserService;
+import me.choizz.chattingserver.api.service.user.UserService;
 import me.choizz.chattingserver.domain.user.User;
 import me.choizz.chattingserver.domain.user.UserRepository;
 import me.choizz.chattingserver.domain.user.UserRole;
