@@ -43,6 +43,8 @@ dependencies {
     testImplementation 'org.springframework.security:spring-security-test'
     implementation 'org.springframework.security:spring-security-messaging:6.1.2'
 
+    implementation 'net.logstash.logback:logstash-logback-encoder:6.1'
+
 }
 
 tasks.named('test') {

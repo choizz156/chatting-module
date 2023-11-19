@@ -372,4 +372,4 @@ gradle-app.setting
 settings.gradle
 HELP.md
 gradlew
-!/docker-compose.yml
+!/chattingserver/docker-compose.yml
