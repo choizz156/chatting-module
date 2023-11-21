@@ -1,0 +1,16 @@
+spring:
+  profiles:
+    default: mysqldb
+
+server:
+  port: 8081
+
+
+
+
+
+
+
+
+
+

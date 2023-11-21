@@ -1,0 +1,12 @@
+spring:
+  config:
+    activate:
+      on-profile: prod
+
+  session:
+    timeout: 86400
+
+  jpa:
+    hibernate:
+      ddl-auto: validate
+

@@ -1,0 +1,6 @@
+spring:
+  profiles:
+    default: mongodb
+
+server:
+  port: 8082
