@@ -369,7 +369,7 @@ gradle-app.setting
 # End of https://www.toptal.com/developers/gitignore/api/java,intellij,macos,gradle
 
 *.jqwik-database
-settings.gradle
+
 HELP.md
-gradlew
+
 !/chattingserver/docker-compose.yml
