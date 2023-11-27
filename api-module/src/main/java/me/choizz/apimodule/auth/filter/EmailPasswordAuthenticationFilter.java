@@ -30,10 +30,9 @@ public class EmailPasswordAuthenticationFilter extends AbstractAuthenticationPro
         final HttpServletRequest request,
         final HttpServletResponse response
     ) throws AuthenticationException, IOException, ServletException {
-        log.error("{}", request.getInputStream());
+
         LoginDto loginDto =
             objectMapper.readValue(request.getInputStream(), LoginDto.class);
-        log.error("{}", loginDto);
 
         UsernamePasswordAuthenticationToken token =
             UsernamePasswordAuthenticationToken.unauthenticated(

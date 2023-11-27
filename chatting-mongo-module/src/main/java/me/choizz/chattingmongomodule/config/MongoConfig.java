@@ -6,6 +6,6 @@ import org.springframework.data.mongodb.repository.config.EnableMongoRepositorie
 
 @Configuration
 @EnableMongoAuditing
-@EnableMongoRepositories(basePackages = "me.choizz.chattingmongomodule.chatmessage")
+@EnableMongoRepositories(basePackages = "me.choizz.chattingmongomodule")
 public  class MongoConfig {
 }
