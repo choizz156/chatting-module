@@ -22,20 +22,24 @@ public class ChattingRoomService {
         final Long hostId,
         final Long clientId
     ) {
+        log.error("sdfsdfsdfsdf");
+        ChattingUser users = getChattingUser(hostId, clientId);
+        ChattingRoom room = new ChattingRoom(roomName);
+        room.makeChattingRoom(users.host(), users.client());
 
+        return chattingRoomRepository.save(room);
+    }
+
+    private ChattingUser getChattingUser(final Long hostId, final Long clientId) {
         User host = userRepository.findById(hostId)
-            .orElseThrow(() -> new IllegalArgumentException("찾을 수 없는 유저입니다."));
-        log.warn(host.getEmail());
+            .orElseThrow(() -> new BusinessLogicException (ExceptionCode.NOT_FOUND_UER));
+
         User client = userRepository.findById(clientId)
-            .orElseThrow(() -> new IllegalArgumentException("찾을 수 없는 유저입니다."));
-        log.warn(client.getEmail());
+            .orElseThrow(() -> new BusinessLogicException(ExceptionCode.NOT_FOUND_UER));
 
         checkDuplicationOfChattingRoom(host, client);
 
-        ChattingRoom room = new ChattingRoom(roomName);
-        room.makeChattingRoom(host, client);
-
-        return chattingRoomRepository.save(room);
+        return new ChattingUser(host, client);
     }
 
     private void checkDuplicationOfChattingRoom(final User host, final User client) {
@@ -44,5 +48,8 @@ public class ChattingRoomService {
         if(isExistRoom){
             throw new BusinessLogicException(ExceptionCode.EXIST_CHATTING_ROOM);
         }
+    }
+
+    private record ChattingUser(User host, User client) {
     }
 }

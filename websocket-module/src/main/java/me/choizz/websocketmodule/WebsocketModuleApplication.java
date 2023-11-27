@@ -10,9 +10,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
     }
 )
 public class WebsocketModuleApplication {
-
     public static void main(String[] args) {
         SpringApplication.run(WebsocketModuleApplication.class, args);
     }
-
 }

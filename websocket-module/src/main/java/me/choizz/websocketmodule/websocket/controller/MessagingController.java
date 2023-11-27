@@ -2,13 +2,17 @@ package me.choizz.websocketmodule.websocket.controller;
 
 import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
-import me.choizz.chattingmongomodule.chatmessage.ChatMessage;
+import lombok.extern.slf4j.Slf4j;
 import me.choizz.chattingmongomodule.chatmessage.ChatService;
+import me.choizz.chattingmongomodule.dto.ChatMessageDto;
 import me.choizz.websocketmodule.websocket.controller.dto.ChatInfo;
+import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.web.bind.annotation.RestController;
 
+@Slf4j
 @RequiredArgsConstructor
 @RestController
 public class MessagingController {
@@ -17,10 +21,13 @@ public class MessagingController {
     private final SimpMessageSendingOperations operations;
 
     @MessageMapping("/chat/{roomId}")
-    public void chat(String roomId, ChatInfo chatInfo) {
-        ChatMessage chatMessage = chatInfo.toEntity(LocalDateTime.now());
-        chatService.saveMassage(roomId, chatMessage);
+    @SendTo("/{roomId}")
+    public void chat(@DestinationVariable Long roomId, ChatInfo chatInfo) {
+        log.info("진입");
 
-        operations.convertAndSend("/sub/" + roomId, chatInfo);
+        ChatMessageDto chatMessageDto = chatInfo.toEntity(LocalDateTime.now());
+        chatService.saveMassage(roomId, chatMessageDto);
+
+        operations.convertAndSend(chatInfo);
     }
 }

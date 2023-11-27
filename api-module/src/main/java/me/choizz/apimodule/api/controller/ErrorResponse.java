@@ -1,4 +1,4 @@
-package me.choizz.apimodule.api.controller.exception;
+package me.choizz.apimodule.api.controller;
 
 
 import com.fasterxml.jackson.annotation.JsonInclude;

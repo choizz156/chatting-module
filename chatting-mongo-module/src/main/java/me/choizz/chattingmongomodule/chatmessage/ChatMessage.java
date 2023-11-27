@@ -1,19 +1,26 @@
 package me.choizz.chattingmongomodule.chatmessage;
 
-import java.time.LocalDateTime;
-import lombok.Builder;
+import java.util.ArrayList;
+import java.util.List;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import me.choizz.chattingmongomodule.dto.ChatMessageDto;
+import org.springframework.data.mongodb.core.index.Indexed;
+import org.springframework.data.mongodb.core.mapping.Document;
 
-public record ChatMessage(String nickname, String message, LocalDateTime createdAt) {
+@Getter
+@NoArgsConstructor
+@Document("chat_room")
+public class ChatMessage extends BaseMongoEntity{
 
-    @Builder
-    public ChatMessage(
-        final String nickname,
-        final String message,
-        final LocalDateTime createdAt
-    ) {
-        this.nickname = nickname;
-        this.message = message;
-        this.createdAt = createdAt;
+
+    @Indexed(unique = true)
+    private Long roomId;
+
+    List<ChatMessageDto> messageList = new ArrayList<>();
+
+    public ChatMessage(final Long roomId, final ChatMessageDto chatMessageDto) {
+        this.roomId = roomId;
+        this.messageList.add(chatMessageDto);
     }
-
 }

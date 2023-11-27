@@ -1,10 +1,10 @@
-spring:
-  data:
-    mongodb:
-      database: choizzdb
-      port: 27017
-      host: localhost
-      username: choizz
-      password: choizz
-      authentication-database: admin
-
+#spring:
+#  data:
+#    mongodb:
+#      database: choizzdb
+#      port: 27017
+#      host: localhost
+#      username: choizz
+#      password: choizz
+#      authentication-database: admin
+#

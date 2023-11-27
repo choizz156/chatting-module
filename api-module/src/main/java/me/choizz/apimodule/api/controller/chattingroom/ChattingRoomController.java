@@ -5,35 +5,37 @@ import lombok.extern.slf4j.Slf4j;
 import me.choizz.apimodule.api.controller.ApiResponseDto;
 import me.choizz.domainjpamodule.chattingroom.ChattingRoom;
 import me.choizz.domainjpamodule.chattingroom.ChattingRoomService;
-import me.choizz.domainjpamodule.chattingroom.dto.ChatRoomRequest;
-import me.choizz.domainjpamodule.chattingroom.dto.ChatRoomResponse;
+import me.choizz.domainjpamodule.chattingroom.dto.ChatRoomRequestDto;
+import me.choizz.domainjpamodule.chattingroom.dto.ChatRoomResponseDto;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @Slf4j
 @RequiredArgsConstructor
+@RequestMapping("/chatting-rooms")
 @RestController
 public class ChattingRoomController {
 
     private final ChattingRoomService chattingRoomService;
 
-    @PostMapping("/chatting-rooms")
-    public ApiResponseDto<ChatRoomResponse> chattingRoom(
-        @RequestBody ChatRoomRequest chatRoomRequest
+    @PostMapping
+    public ApiResponseDto<ChatRoomResponseDto> chattingRoom(
+        @RequestBody ChatRoomRequestDto chatRoomRequestDto
     ) {
 
         ChattingRoom chattingRoom = chattingRoomService.createOneToOne(
-            chatRoomRequest.getName(),
-            chatRoomRequest.getHostId(),
-            chatRoomRequest.getClientId()
+            chatRoomRequestDto.getName(),
+            chatRoomRequestDto.getHostId(),
+            chatRoomRequestDto.getClientId()
         );
 
         return new ApiResponseDto<>(
-            ChatRoomResponse.of(
+            ChatRoomResponseDto.of(
                 chattingRoom.getId(),
-                chattingRoom.getHost(),
-                chattingRoom.getClient()
+                chattingRoom.getHost().getNickname(),
+                chattingRoom.getClient().getNickname()
             )
         );
     }

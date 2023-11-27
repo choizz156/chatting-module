@@ -1,4 +1,4 @@
-package me.choizz.domainjpamodule.user;
+package me.choizz.domainjpamodule.chattingroom.dto;
 
 
 import jakarta.validation.constraints.Email;

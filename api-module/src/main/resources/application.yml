@@ -1,9 +1,10 @@
 spring:
   profiles:
-    default: mysqldb
+    default: h2
+
 
 server:
-  port: 8081
+  port: 8080
 
 
 

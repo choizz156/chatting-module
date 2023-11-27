@@ -2,6 +2,7 @@ package me.choizz.domainjpamodule.user;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import me.choizz.domainjpamodule.chattingroom.dto.JoinDto;
 import me.choizz.domainjpamodule.exception.BusinessLogicException;
 import me.choizz.domainjpamodule.exception.ExceptionCode;
 import org.springframework.security.crypto.password.PasswordEncoder;
