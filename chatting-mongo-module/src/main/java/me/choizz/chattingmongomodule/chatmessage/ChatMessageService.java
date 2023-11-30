@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 @Slf4j
 @RequiredArgsConstructor
 @Service
-public class ChatService {
+public class ChatMessageService {
 
     private final MongoTemplate mongoTemplate;
     private final ChatRoomRepository chatRoomRepository;

@@ -1,11 +1,11 @@
-package me.choizz.websocketmodule.websocket.controller;
+package me.choizz.websocketmodule.websocket.message;
 
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import me.choizz.chattingmongomodule.chatmessage.ChatMessage;
-import me.choizz.chattingmongomodule.chatmessage.ChatService;
+import me.choizz.chattingmongomodule.chatmessage.ChatMessageService;
 import me.choizz.chattingmongomodule.dto.ChatMessageDto;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -21,17 +21,18 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class ChatMessageController {
 
-    private final ChatService chatService;
+    private final ChatMessageService chatMessageService;
     private final SimpMessageSendingOperations operations;
 
     @MessageMapping("/chat")
     public void chat(ChatMessageDto chatMessageDto) {
+        log.warn("{}", chatMessageDto.toString());
         ChatMessage chatMessage = chatMessageDto.toEntity();
-        chatService.saveMassage(chatMessageDto.roomId(), chatMessage);
+        chatMessageService.saveMassage(chatMessageDto.roomId(), chatMessage);
         operations.convertAndSendToUser(
             String.valueOf(chatMessage.getReceiverId()),
             "/queue/messages",
-            chatMessage
+            chatMessageDto
         );
     }
 
@@ -39,6 +40,6 @@ public class ChatMessageController {
     public ResponseEntity<Optional<List<ChatMessage>>> findChatMessages(
         @PathVariable String selectedRoomId
     ) {
-        return ResponseEntity.ok(chatService.findChatMessages(selectedRoomId));
+        return ResponseEntity.ok(chatMessageService.findChatMessages(selectedRoomId));
     }
 }
