@@ -2,8 +2,8 @@ package me.choizz.domainjpamodule.user;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import me.choizz.domainjpamodule.chattingroom.dto.JoinDto;
-import me.choizz.domainjpamodule.exception.BusinessLogicException;
+import me.choizz.domainjpamodule.dto.JoinDto;
+import me.choizz.domainjpamodule.exception.ApiBusinessLogicException;
 import me.choizz.domainjpamodule.exception.ExceptionCode;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -35,13 +35,13 @@ public class UserService {
 
     private void checkDuplicationOfNickname(final String nickname) {
         if (userRepository.existsUserByNickname(nickname)) {
-            throw new BusinessLogicException(ExceptionCode.EXIST_NICKNAME);
+            throw new ApiBusinessLogicException(ExceptionCode.EXIST_NICKNAME);
         }
     }
 
     private void checkDuplicationOfEmail(final String email) {
         if (userRepository.existsUserByEmail(email)) {
-            throw new BusinessLogicException(ExceptionCode.EXIST_EMAIL);
+            throw new ApiBusinessLogicException(ExceptionCode.EXIST_EMAIL);
         }
     }
 }

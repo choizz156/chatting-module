@@ -4,7 +4,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import me.choizz.apimodule.api.controller.ApiResponseDto;
-import me.choizz.domainjpamodule.chattingroom.dto.JoinDto;
+import me.choizz.domainjpamodule.dto.JoinDto;
 import me.choizz.domainjpamodule.user.User;
 import me.choizz.domainjpamodule.user.UserService;
 import org.springframework.http.HttpStatus;

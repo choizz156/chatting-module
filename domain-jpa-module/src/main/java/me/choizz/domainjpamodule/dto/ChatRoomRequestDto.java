@@ -1,4 +1,4 @@
-package me.choizz.domainjpamodule.chattingroom.dto;
+package me.choizz.domainjpamodule.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
