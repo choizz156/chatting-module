@@ -4,15 +4,10 @@
       <div
         v-for="message in chatMessages"
         :key="message.id"
-        :roomId="message.roomId"
-        :senderId="message.senderId"
-        :receiverId="message.receiverId"
-        :senderNickname="message.senderNickname"
-        :receiverNickname="message.receiverNickname"
         :class="{
           message: true,
-          sender: message.senderId !== receiverId,
-          receiver: message.receiverId === receiverId,
+          sender: message.senderId !== userId,
+          receiver: message.senderId === receiverId,
         }"
       >
         <p>{{ message.content }}</p>
@@ -48,7 +43,7 @@ export default {
       messageInput: "",
       chatArea: null,
       chatMessages: [],
-      senderId: "",
+      senderId: null,
       senderNickname: "",
     };
   },
@@ -100,7 +95,9 @@ export default {
       this.$refs.chatArea.scrollTop = this.$refs.chatArea.scrollHeight;
     },
   },
-
+  updated() {
+    this.scrollToBottom();
+  },
   mounted() {
     this.messageForm = this.$refs.messageForm;
     this.chatArea = this.$refs.chatArea;
@@ -137,15 +134,15 @@ export default {
 }
 
 .sender {
-  background-color: blue;
-  color: #fff;
-  align-self: flex-start;
+  background-color: lavender;
+  color: black;
+  align-self: flex-end;
 }
 
 .receiver {
-  background-color: lightslategray;
+  background-color: lightsteelblue;
   color: #333;
-  align-self: flex-end;
+  align-self: flex-start;
 }
 
 .message-input {

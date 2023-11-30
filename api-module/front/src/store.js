@@ -15,11 +15,11 @@ const store = createStore({
     },
     senderEl: {
       nickname: "",
-      userId: "",
+      userId: null,
       email: "",
     },
     roomEl: {
-      roomId: 0,
+      roomId: null,
     },
   },
   mutations: {

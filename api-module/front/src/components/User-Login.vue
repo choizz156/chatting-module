@@ -49,10 +49,20 @@ export default {
       email: "",
       password: "",
       nickname: "",
-      userId: 0,
+      userId: null,
     };
   },
   methods: {
+    routing() {
+      this.$router.push({
+        path: "/",
+        query: {
+          email: this.email,
+          nickname: this.nickname,
+          userId: this.userId,
+        },
+      });
+    },
     async processLogin() {
       const host = "http://localhost:8080";
       axios
@@ -65,14 +75,7 @@ export default {
             this.nickname = response.data.data.nickname;
             this.userId = response.data.data.userId;
 
-            this.$router.push({
-              path: "/",
-              query: {
-                email: this.email,
-                nickname: this.nickname,
-                userId: this.userId,
-              },
-            });
+            this.routing();
           }
         })
         .catch((reason) => {

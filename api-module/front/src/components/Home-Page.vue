@@ -24,7 +24,7 @@ export default {
   name: "Home-Page",
   data() {
     return {
-      userId: 0,
+      userId: null,
       email: "",
       nickname: "",
     };

@@ -48,7 +48,7 @@ export default {
   data() {
     return {
       isRoomMade: false,
-      roomId: -1,
+      roomId: null,
     };
   },
 
@@ -130,7 +130,7 @@ export default {
 }
 
 .user-item.active {
-  background-color: #cdebff;
+  background-color: lavender;
   color: #4f4f4f;
   padding: 10px;
   border-radius: 5px;

@@ -25,6 +25,11 @@
           </ul>
         </div>
         <div>
+          <div><strong>nickname:</strong> {{ myNickname }}</div>
+          <div><strong>email: </strong>{{ myEmail }}</div>
+        </div>
+        <hr class="my-2" />
+        <div>
           <a class="logout" href="javascript:void(0)" id="logout">Logout</a>
         </div>
       </div>
@@ -53,13 +58,13 @@ export default {
       receivers: [],
       isActive: false,
       activeUserId: null,
-      myUserId: this.$route.query.userId,
+      myUserId: parseInt(this.$route.query.userId),
       myEmail: this.$route.query.email,
       myNickname: this.$route.query.nickname,
-      selectedRoomId: "",
+      selectedRoomId: null,
       chatArea: null,
       stompClient: null,
-      chatReceiverId: "",
+      chatReceiverId: null,
       chatReceiverNickname: "",
       sendingUserId: null,
     };
@@ -129,16 +134,11 @@ export default {
     async receiveMessage(payload) {
       await this.connectUsers();
       const message = JSON.parse(payload.body);
-      console.log(message);
-      console.log(message.receiverId + " " + message.receiverNickname);
-      console.log(this.myUserId + " " + this.myNickname);
-      console.log(this.selectedRoomId);
-      console.log(message.roomId);
+
       if (
-        this.selectedRoomId == message.roomId &&
-        message.receiverId == this.myUserId
+        this.selectedRoomId === message.roomId &&
+        message.receiverId === this.myUserId
       ) {
-        console.log("sdfsdfsdfsdf");
         this.$store.commit("addMessage", message);
         return;
       }
@@ -180,7 +180,7 @@ body {
   max-height: 600px;
   margin: 20px;
   border: 1px solid #ccc;
-  background-color: #fff;
+  background-color: cornsilk;
   overflow: hidden;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   border-radius: 8px;
