@@ -3,18 +3,16 @@ package me.choizz.chattingmongomodule.user;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.FieldType;
+import org.springframework.data.mongodb.core.mapping.MongoId;
 
 @Getter
 @NoArgsConstructor
 @Document
 public class LoginUser {
 
-    @Id
-    private String id;
-    @Indexed(unique = true)
+    @MongoId(targetType = FieldType.INT64)
     private Long userId;
     private String email;
     private String nickname;
