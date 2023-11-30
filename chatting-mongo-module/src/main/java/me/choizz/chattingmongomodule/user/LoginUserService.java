@@ -11,8 +11,8 @@ public class LoginUserService {
     private final LoginUserRepository loginUserRepository;
 
 
-    public void connectUser(LoginUser user){
-        loginUserRepository.save(user);
+    public void connectUser(LoginUser loginUser){
+        loginUserRepository.save(loginUser);
     }
 
     public void disconnectUser(LoginUser user){

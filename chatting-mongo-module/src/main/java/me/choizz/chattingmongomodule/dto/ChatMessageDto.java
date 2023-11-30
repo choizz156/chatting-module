@@ -1,22 +1,24 @@
 package me.choizz.chattingmongomodule.dto;
 
 import java.time.LocalDateTime;
-import lombok.Builder;
+import me.choizz.chattingmongomodule.chatmessage.ChatMessage;
 
 public record ChatMessageDto(
-    String nickname,
-    String message,
-    LocalDateTime createdAt
+    String roomId,
+    Long senderId,
+    Long receiverId,
+    String senderNickname,
+    String receiverNickname,
+    String content
 ) {
-    @Builder
-    public ChatMessageDto(
-        final String nickname,
-        final String message,
-        final LocalDateTime createdAt
-    ) {
-        this.nickname = nickname;
-        this.message = message;
-        this.createdAt = createdAt;
+    public ChatMessage toEntity() {
+        return ChatMessage.builder()
+            .senderId(senderId())
+            .receiverId(receiverId())
+            .senderNickname(senderNickname())
+            .receiverNickname(receiverNickname())
+            .content(content())
+            .createAt(LocalDateTime.now())
+            .build();
     }
-
 }
