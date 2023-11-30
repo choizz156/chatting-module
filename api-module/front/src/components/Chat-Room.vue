@@ -7,16 +7,20 @@
           <h2 @click="connectUsers">Online Users</h2>
           <ul id="connectedUsers">
             <connected-user
-              :my-nickname="nickname"
-              :my-user-id="userId"
-              v-for="(user, index) in users"
-              :key="user.userId"
+              :my-nickname="myNickname"
+              :my-user-id="myUserId"
+              v-for="(receiver, index) in receivers"
+              :key="receiver.userId"
               :index="index"
-              :receiver-id="user.userId"
-              :receiver-nickname="user.nickname"
-              :length="users.length"
+              :receiver-id="receiver.userId"
+              :receiver-nickname="receiver.nickname"
+              :length="receivers.length"
               :make-room="true"
-              @add-receiver="addMessage"
+              :is-active="active(receiver.userId)"
+              :is-nr-msg="nrMsg(receiver.userId)"
+              @add-receiver="addMessageEvent"
+              @user-clicked="applyActiveEvent"
+              @read-msg="readMessageEvent"
             ></connected-user>
           </ul>
         </div>
@@ -27,8 +31,8 @@
       <chat-area
         :stomp-client="stompClient"
         :room-id="selectedRoomId"
-        :receiver-id="receiverId"
-        :receiver-nickname="receiverNickname"
+        :receiver-id="chatReceiverId"
+        :receiver-nickname="chatReceiverNickname"
       ></chat-area>
     </div>
   </div>
@@ -46,31 +50,50 @@ export default {
   components: { ChatArea, ConnectedUser },
   data() {
     return {
-      userId: this.$route.query.userId,
-      email: this.$route.query.email,
-      nickname: this.$route.query.nickname,
+      receivers: [],
+      isActive: false,
+      activeUserId: null,
+      myUserId: this.$route.query.userId,
+      myEmail: this.$route.query.email,
+      myNickname: this.$route.query.nickname,
       selectedRoomId: "",
       chatArea: null,
       stompClient: null,
-      users: [],
-      receiverId: "",
-      receiverNickname: "",
+      chatReceiverId: "",
+      chatReceiverNickname: "",
+      sendingUserId: null,
     };
   },
   computed: {},
   methods: {
-    addMessage(receiverId, receiverNickname, roomId) {
-      this.receiverId = receiverId;
-      this.receiverNickname = receiverNickname;
+    nrMsg(receiverUserId) {
+      return this.sendingUserId === receiverUserId;
+    },
+    active(receiverUserId) {
+      return this.activeUserId === receiverUserId;
+    },
+
+    readMessageEvent() {
+      this.sendingUserId = null;
+    },
+
+    applyActiveEvent(receiverId) {
+      this.activeUserId = receiverId;
+    },
+
+    addMessageEvent(receiverId, receiverNickname, roomId) {
+      this.chatReceiverId = receiverId;
+      this.chatReceiverNickname = receiverNickname;
       this.selectedRoomId = roomId;
     },
+
     async connectUsers() {
       axios
         .get("http://localhost:8083/login-users")
         .then((resp) => {
           let connectedUsers = resp.data;
-          this.users = connectedUsers.filter(
-            (user) => user.email !== this.email
+          this.receivers = connectedUsers.filter(
+            (user) => user.email !== this.myEmail
           );
         })
         .catch(() => alert("로그인된 유저를 가지고 오지 못했습니다."));
@@ -84,7 +107,7 @@ export default {
 
     onConnected() {
       this.stompClient.subscribe(
-        `/user/${this.userId}/queue/messages`,
+        `/user/${this.myUserId}/queue/messages`,
         this.receiveMessage
       );
       this.stompClient.subscribe(`/user/public`, this.receiveMessage);
@@ -92,12 +115,13 @@ export default {
         "/app/login-users",
         {},
         JSON.stringify({
-          userId: this.userId,
-          email: this.email,
-          nickname: this.nickname,
+          userId: this.myUserId,
+          email: this.myEmail,
+          nickname: this.myNickname,
         })
       );
     },
+
     onError() {
       alert("소켓 연결 실패");
     },
@@ -106,32 +130,31 @@ export default {
       await this.connectUsers();
       const message = JSON.parse(payload.body);
       console.log(message);
-
-      this.$store.commit("addMessage", message);
-
-      // if (this.selectedRoomId) {
-      //   document
-      //     .querySelector(`#${this.selectedRoomId}`)
-      //     .classList.add("active");
-      // } else {
-      //   this.messageForm.classList.add("hidden");
-      // }
-
-      // const notifiedUser = document.querySelector(
-      //   `#${this.message.senderNickname}`
-      // );
-      // if (notifiedUser && !notifiedUser.classList.contains("active")) {
-      //   const nbrMsg = notifiedUser.querySelector(".nbr-msg");
-      //   nbrMsg.classList.remove("hidden");
-      //   nbrMsg.textContent = "";
-      // }
+      console.log(message.receiverId + " " + message.receiverNickname);
+      console.log(this.myUserId + " " + this.myNickname);
+      console.log(this.selectedRoomId);
+      console.log(message.roomId);
+      if (
+        this.selectedRoomId == message.roomId &&
+        message.receiverId == this.myUserId
+      ) {
+        console.log("sdfsdfsdfsdf");
+        this.$store.commit("addMessage", message);
+        return;
+      }
+      this.sendingUserId = message.senderId;
     },
   },
 
   mounted() {
     this.connectWebSocket();
-    this.messageForm = this.$refs.messageForm;
-    this.chatArea = this.$refs.chatArea;
+
+    const userInfo = {
+      email: this.myEmail,
+      nickname: this.myNickname,
+      userId: this.myUserId,
+    };
+    this.$store.commit("setUser", userInfo);
   },
 };
 </script>
@@ -168,7 +191,7 @@ body {
   border-right: 1px solid #ccc;
   padding: 20px;
   box-sizing: border-box;
-  background-color: #3498db;
+  background-color: burlywood;
   color: #fff;
   border-top-left-radius: 8px;
   border-bottom-left-radius: 8px;
@@ -191,112 +214,6 @@ body {
   list-style: none;
   padding: 0;
   margin: 0;
-}
-
-.user-item {
-  display: flex;
-  align-items: center;
-  margin-bottom: 8px;
-  cursor: pointer;
-}
-
-.user-item.active {
-  background-color: #cdebff;
-  color: #4f4f4f;
-  padding: 10px;
-  border-radius: 5px;
-}
-
-.user-item img {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  margin-right: 10px;
-}
-
-.user-item span {
-  font-weight: bold;
-}
-
-.separator {
-  height: 1px;
-  background-color: #ccc;
-  margin: 10px 0;
-}
-
-.chat-area {
-  flex: 3;
-  display: flex;
-  flex-direction: column;
-  padding: 20px;
-  box-sizing: border-box;
-  border-top-right-radius: 8px;
-  border-bottom-right-radius: 8px;
-}
-
-.message {
-  margin-bottom: 5px;
-  border-radius: 5px;
-}
-
-#chat-messages {
-  display: flex;
-  flex-direction: column;
-  overflow-y: scroll;
-}
-
-.message p {
-  padding: 0 12px;
-  border-radius: 15px;
-  word-wrap: break-word;
-}
-
-.user-item span.nbr-msg {
-  margin-left: 10px;
-  background-color: #f8fa6f;
-  color: white;
-  padding: 5px;
-  width: 10px;
-  border-radius: 50%;
-  height: 10px;
-}
-
-.sender {
-  background-color: #3498db;
-  color: #fff;
-  align-self: flex-end;
-}
-
-.receiver {
-  background-color: #ecf0f1;
-  color: #333;
-  align-self: flex-start;
-}
-
-.message-input {
-  margin-top: auto;
-  display: flex;
-}
-
-.message-input input {
-  flex: 1;
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  margin-right: 10px;
-}
-
-.message-input button {
-  padding: 10px;
-  border: none;
-  background-color: #3498db;
-  color: #fff;
-  border-radius: 5px;
-  cursor: pointer;
-}
-
-.hidden {
-  display: none;
 }
 
 a.logout {

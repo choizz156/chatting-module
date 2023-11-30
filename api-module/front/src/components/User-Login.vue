@@ -64,12 +64,6 @@ export default {
           if (response.status === 200) {
             this.nickname = response.data.data.nickname;
             this.userId = response.data.data.userId;
-            const userInfo = {
-              email: this.email,
-              nickname: this.nickname,
-              userId: this.userId,
-            };
-            this.$store.commit("setUser", userInfo);
 
             this.$router.push({
               path: "/",

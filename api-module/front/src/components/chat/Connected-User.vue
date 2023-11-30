@@ -2,15 +2,13 @@
   <li
     ref="clickedUser"
     @click.prevent="createRoomIfNotExist"
-    class="user-item"
     :class="isSelected"
+    class="user-item"
   >
     <span>{{ receiverNickname }}</span>
-    <!--    <message></message>-->
-    <template v-if="separator(index)">
-      <li class="separator"></li>
-    </template>
+    <span :class="addNrMsg" class="user-item span"></span>
   </li>
+  <hr class="my-1" />
 </template>
 
 <script>
@@ -39,39 +37,44 @@ export default {
     length: {
       type: Number,
     },
+    isActive: {
+      type: Boolean,
+    },
+    isNrMsg: {
+      type: Boolean,
+    },
   },
 
   data() {
     return {
-      selected: true,
-      selectedRoomId: "",
       isRoomMade: false,
       roomId: -1,
     };
   },
+
   computed: {
     isSelected() {
-      return { active: this.selected };
+      return { active: this.isActive };
+    },
+    addNrMsg() {
+      return { "nr-msg": this.isNrMsg };
     },
   },
+
   methods: {
-    separator(index) {
-      return index !== this.length - 1;
-    },
     createRoomIfNotExist() {
-      console.log(this.isRoomMade);
       if (this.isRoomMade === true) {
         this.userItemClick();
       } else {
         this.createChatRoom();
       }
     },
+
     createChatRoom() {
       if (this.isRoomMade) {
         return;
       }
-      console.log(this.myNickname);
-      console.log(this.myUserId);
+
       axios
         .post("http://localhost:8080/chatting-rooms", {
           name: this.myNickname + "_" + this.receiverNickname,
@@ -93,14 +96,14 @@ export default {
     },
 
     userItemClick() {
-      this.selected = false;
-      this.$store.commit("show", false);
+      this.$emit("user-clicked", this.receiverId);
+      this.$emit("read-msg", null);
 
-      const clickedUser = this.$refs.clickedUser;
-      clickedUser.classList.add("active");
+      this.$store.commit("show", false);
 
       this.fetchAndDisplayUserChat().then();
     },
+
     async fetchAndDisplayUserChat() {
       axios
         .get(`http://localhost:8083/messages/${this.roomId}`)
@@ -133,26 +136,17 @@ export default {
   border-radius: 5px;
 }
 
-/*
-.user-item img {
-  width: 40px;
-  height: 40px;
+.user-item span.nr-msg {
+  margin-left: 10px;
+  background-color: royalblue;
+  color: white;
+  padding: 5px;
+  width: 10px;
   border-radius: 50%;
-  margin-right: 10px;
+  height: 10px;
 }
-*/
 
 .user-item span {
   font-weight: bold;
-}
-
-.separator {
-  height: 1px;
-  background-color: #ccc;
-  margin: 10px 0;
-}
-
-.hidden {
-  display: none;
 }
 </style>

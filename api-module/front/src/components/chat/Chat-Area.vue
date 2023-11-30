@@ -47,7 +47,6 @@ export default {
       messageForm: null,
       messageInput: "",
       chatArea: null,
-      isHidden: true,
       chatMessages: [],
       senderId: "",
       senderNickname: "",
@@ -66,8 +65,7 @@ export default {
       this.addMessage(message);
     },
     getMessageList(messages) {
-      let list = messages.filter((m) => m !== null);
-      this.chatMessages = list;
+      this.chatMessages = messages.filter((m) => m !== null);
     },
     chatMessages() {
       this.$nextTick(() => {
@@ -103,8 +101,6 @@ export default {
     },
   },
 
-  update() {},
-
   mounted() {
     this.messageForm = this.$refs.messageForm;
     this.chatArea = this.$refs.chatArea;
@@ -135,7 +131,7 @@ export default {
 }
 
 .message p {
-  padding-top: 7px;
+  padding: 0 12px;
   border-radius: 15px;
   word-wrap: break-word;
 }
@@ -147,7 +143,7 @@ export default {
 }
 
 .receiver {
-  background-color: red;
+  background-color: lightslategray;
   color: #333;
   align-self: flex-end;
 }
