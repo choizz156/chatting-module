@@ -10,8 +10,8 @@ import java.io.IOException;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import me.choizz.apimodule.api.controller.ApiResponseDto;
-import me.choizz.apimodule.api.controller.ErrorResponse;
+import me.choizz.apimodule.api.controller.dto.ApiResponseDto;
+import me.choizz.apimodule.api.controller.exception.ErrorResponse;
 import org.springframework.http.HttpStatus;
 
 @Slf4j

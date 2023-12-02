@@ -50,9 +50,15 @@ public class ChattingRoom extends BaseJpaEntity {
         this.client.getClientChattingRooms().add(this);
     }
 
-
-
     public ChattingRoom(final String roomName) {
         this.roomName = roomName;
+    }
+
+    public String getHostNickName(){
+        return this.host.getNickname();
+    }
+
+    public String getClientName(){
+        return this.client.getNickname();
     }
 }

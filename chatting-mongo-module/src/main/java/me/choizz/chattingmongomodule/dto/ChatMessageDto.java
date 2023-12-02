@@ -4,7 +4,7 @@ import java.time.LocalDateTime;
 import me.choizz.chattingmongomodule.chatmessage.ChatMessage;
 
 public record ChatMessageDto(
-    String roomId,
+    Long roomId,
     Long senderId,
     Long receiverId,
     String senderNickname,

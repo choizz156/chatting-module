@@ -19,7 +19,7 @@ public class ChatMessageService {
     private final MongoTemplate mongoTemplate;
     private final ChatRoomRepository chatRoomRepository;
 
-    public void saveMassage(final String roomId, final ChatMessage chatMessage) {
+    public void saveMassage(final Long roomId, final ChatMessage chatMessage) {
         checkExistChatRoom(roomId, chatMessage);
 
         Update update = new Update().push("messageList", chatMessage);
@@ -30,7 +30,7 @@ public class ChatMessageService {
         );
     }
 
-    public Optional<List<ChatMessage>> findChatMessages(String roomId) {
+    public Optional<List<ChatMessage>> findChatMessages(Long roomId) {
         if (!chatRoomRepository.existsById(roomId)) {
             ChatRoom chatRoom = ChatRoom.of(roomId);
             chatRoomRepository.save(chatRoom);
@@ -40,7 +40,7 @@ public class ChatMessageService {
     }
 
 
-    private void checkExistChatRoom(final String roomId, final ChatMessage chatMessage) {
+    private void checkExistChatRoom(final Long roomId, final ChatMessage chatMessage) {
         if (!chatRoomRepository.existsById(roomId)) {
             ChatRoom chatRoom = ChatRoom.of(roomId, chatMessage);
             chatRoomRepository.save(chatRoom);

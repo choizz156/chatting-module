@@ -1,4 +1,4 @@
-package me.choizz.apimodule.auth;
+package me.choizz.apimodule.auth.details;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

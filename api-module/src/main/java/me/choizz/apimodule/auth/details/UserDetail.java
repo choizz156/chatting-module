@@ -1,22 +1,26 @@
-package me.choizz.apimodule.auth;
+package me.choizz.apimodule.auth.details;
 
 import java.util.Collection;
+import lombok.EqualsAndHashCode;
+import lombok.extern.slf4j.Slf4j;
 import me.choizz.apimodule.auth.dto.UserDetailsDto;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.UserDetails;
 
+@Slf4j
+@EqualsAndHashCode
 public class UserDetail implements UserDetails {
 
     private final UserDetailsDto dto;
-    
+
     public UserDetail(UserDetailsDto dto) {
         this.dto = dto;
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return AuthorityUtils.createAuthorityList( dto.role());
+        return AuthorityUtils.createAuthorityList(dto.role());
     }
 
     @Override

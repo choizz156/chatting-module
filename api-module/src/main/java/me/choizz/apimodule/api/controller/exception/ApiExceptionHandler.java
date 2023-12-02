@@ -1,8 +1,7 @@
 package me.choizz.apimodule.api.controller.exception;
 
 import lombok.extern.slf4j.Slf4j;
-import me.choizz.apimodule.api.controller.ApiResponseDto;
-import me.choizz.apimodule.api.controller.ErrorResponse;
+import me.choizz.apimodule.api.controller.dto.ApiResponseDto;
 import me.choizz.domainjpamodule.exception.ApiBusinessLogicException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.MethodArgumentNotValidException;

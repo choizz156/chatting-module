@@ -38,7 +38,7 @@ public class ChatMessageController {
 
     @GetMapping("/messages/{selectedRoomId}")
     public ResponseEntity<Optional<List<ChatMessage>>> findChatMessages(
-        @PathVariable String selectedRoomId
+        @PathVariable Long selectedRoomId
     ) {
         return ResponseEntity.ok(chatMessageService.findChatMessages(selectedRoomId));
     }

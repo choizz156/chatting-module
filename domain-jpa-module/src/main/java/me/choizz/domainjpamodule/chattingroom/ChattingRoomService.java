@@ -25,10 +25,35 @@ public class ChattingRoomService {
         final Long hostId,
         final Long clientId
     ) {
+
+        Optional<ChattingRoom> roomOptional = checkDuplicationOfChattingRoom(hostId, clientId);
+        if(roomOptional.isPresent()){
+            return roomOptional.get();
+        }
+        
         ChattingUser users = getChattingUser(hostId, clientId);
         ChattingRoom room = new ChattingRoom(roomName);
         room.makeChattingRoom(users.host(), users.client());
         return roomRepository.save(room);
+    }
+
+    private Optional<ChattingRoom> checkDuplicationOfChattingRoom(final Long hostId, final Long clientId) {
+
+        List<ChattingRoom> hostRoom =
+            roomRepository.findChattingRoomByHostIdAndClientId(hostId, clientId);
+
+        if (hostRoom.size() == 1) {
+            return Optional.of(hostRoom.get(0));
+        }
+
+        List<ChattingRoom> clientRoom =
+            roomRepository.findChattingRoomByHostIdAndClientId(clientId, hostId);
+
+        if (clientRoom.size() == 1) {
+            return Optional.of(clientRoom.get(0)); 
+        }
+
+        return Optional.empty();
     }
 
     private ChattingUser getChattingUser(final Long hostId, final Long clientId) {
@@ -40,25 +65,6 @@ public class ChattingRoomService {
             .orElseThrow(() -> new ApiBusinessLogicException(ExceptionCode.NOT_FOUND_UER));
 
         return new ChattingUser(host, client);
-    }
-
-    public Optional<Long> checkDuplicationOfChattingRoom(final Long host, final Long client) {
-
-        List<ChattingRoom> hostRoom =
-            roomRepository.findChattingRoomByHostIdAndClientId(host, client);
-
-        if (hostRoom.size() == 1) {
-            return Optional.of(hostRoom.get(0).getId());
-        }
-
-        List<ChattingRoom> clientRoom =
-            roomRepository.findChattingRoomByHostIdAndClientId(client, host);
-
-        if (clientRoom.size() == 1) {
-            return Optional.of(clientRoom.get(0).getId());
-        }
-
-        return Optional.empty();
     }
 
     private record ChattingUser(User host, User client) {
