@@ -10,7 +10,7 @@ import org.springframework.data.mongodb.core.mapping.MongoId;
 @Getter
 @NoArgsConstructor
 @Document
-public class LoginUser {
+public class ConnectedUser {
 
     @MongoId(targetType = FieldType.INT64)
     private Long userId;
@@ -18,7 +18,7 @@ public class LoginUser {
     private String nickname;
 
     @Builder
-    public LoginUser(final Long userId, final String email, final String nickname) {
+    public ConnectedUser(final Long userId, final String email, final String nickname) {
         this.userId = userId;
         this.email = email;
         this.nickname = nickname;
