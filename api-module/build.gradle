@@ -20,16 +20,16 @@ dependencies {
     //web
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
-
-    //session
-    implementation 'org.springframework.session:spring-session-jdbc'
+//
+//    //session
+//    implementation 'org.springframework.session:spring-session-jdbc'
+    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+    implementation 'org.springframework.session:spring-session-data-redis'
 
     //jpa
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 
-    //security
-    implementation 'org.springframework.boot:spring-boot-starter-security'
-    testImplementation 'org.springframework.security:spring-security-test'
+    implementation 'org.springframework.security:spring-security-crypto'
 
     //lombok
     compileOnly 'org.projectlombok:lombok:1.18.26'
