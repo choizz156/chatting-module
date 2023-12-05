@@ -6,7 +6,7 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import java.util.List;
 import lombok.Builder;
 import lombok.Getter;
-import me.choizz.domainjpamodule.exception.ExceptionCode;
+import me.choizz.domainjpamodule.exception.ApiExceptionCode;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
@@ -33,10 +33,10 @@ public class ErrorResponse {
             .build();
     }
 
-    public static ErrorResponse of(ExceptionCode exceptionCode) {
+    public static ErrorResponse of(ApiExceptionCode apiExceptionCode) {
         return builder()
-            .status(exceptionCode.getCode())
-            .msg(exceptionCode.getMsg())
+            .status(apiExceptionCode.getCode())
+            .msg(apiExceptionCode.getMsg())
             .build();
     }
 

@@ -6,6 +6,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import me.choizz.apimodule.api.controller.dto.ApiResponseDto;
+import me.choizz.apimodule.auth.dto.UserResponseDto;
 import me.choizz.domainjpamodule.dto.JoinDto;
 import me.choizz.domainjpamodule.user.User;
 import me.choizz.domainjpamodule.user.UserService;
@@ -34,6 +35,4 @@ public class UserController {
 
         return new ApiResponseDto<>(UserResponseDto.of(user));
     }
-
-
 }
