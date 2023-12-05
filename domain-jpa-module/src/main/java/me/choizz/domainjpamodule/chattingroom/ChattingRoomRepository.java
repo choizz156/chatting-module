@@ -1,11 +1,12 @@
 package me.choizz.domainjpamodule.chattingroom;
 
-import java.util.List;
+import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 public interface ChattingRoomRepository extends JpaRepository<ChattingRoom, Long> {
 
-
-    List<ChattingRoom> findChattingRoomByHostIdAndClientId(Long hostId, Long clientId);
-
+    @Query("select r from ChattingRoom  r where r.host.id = :hostId and r.client.id = :clientId or r.host.id = :clientId and r.client.id = :hostId")
+    Optional<ChattingRoom> findChattingRoomByHostIdAndClientId(@Param("hostId")Long hostId, @Param("clientId")Long clientId);
 }
