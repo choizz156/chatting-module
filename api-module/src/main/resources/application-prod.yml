@@ -1,14 +1,14 @@
 spring:
   jpa:
     hibernate:
-      ddl-auto:
+      ddl-auto: create
     defer-datasource-initialization: on
 
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    username: choizz
+    username: choizz1
     password: 1234
-    url: jdbc:mysql://choizz-api1.kro.kr:3306/choizzdb
+    url: jdbc:mysql://localhost:3306/choizzdb
 
   data:
     redis:
