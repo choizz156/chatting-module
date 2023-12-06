@@ -16,10 +16,19 @@ services:
       - '--collation-server=utf8mb4_unicode_ci'
 
     environment:
-      MYSQL_ROOT_HOST: '%'
+      MYSQL_ROOT_HOST: 'choizz-api1.kro.kr'
       MYSQL_ROOT_PASSWORD: '1234'
       MYSQL_DATABASE: 'choizzdb'
       TZ: Asia/Seoul
+
+  redis:
+    image: redis
+    container_name: redis_session
+    ports:
+      - "6379:6379"
+    volumes:
+      - ./redis.conf:/usr/local/etc/redis/redis.conf
+    command: [ "redis-server", "/usr/local/etc/redis/redis.conf" ]
 
 
   db-admin:

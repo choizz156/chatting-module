@@ -11,8 +11,21 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: choizz
     password: 1234
-    url: jdbc:mysql://localhost:3306/choizzdb
+    url: jdbc:mysql://choizz-api1.kro.kr:3306/choizzdb
+
+  data:
+    redis:
+      host: choizz-api1.kro.kr
+      password: 1234
+      port: 6379
+
 
   session:
     timeout: 1800
+
+server:
+  port: 8080
+  servlet:
+    session:
+      tracking-modes: cookie
 
