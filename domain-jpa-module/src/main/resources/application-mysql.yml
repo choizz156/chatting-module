@@ -1,0 +1,15 @@
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: create
+    defer-datasource-initialization: on
+
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: choizz1
+    password: 1234
+    url: jdbc:mysql://localhost:3306/choizzdb
+
+
+
+
