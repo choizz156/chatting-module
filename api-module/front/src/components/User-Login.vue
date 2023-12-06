@@ -1,5 +1,6 @@
 <template>
   <div class="container login-form">
+    <h2>Login</h2>
     <div class="form-group">
       <label for="emailInput" class="form-label mt-4">Email address</label>
       <div class="col-lg-12">
@@ -15,7 +16,7 @@
     </div>
     <div class="form-group">
       <label for="passwordInput" class="form-label mt-4">Password</label>
-      <div class="col-lg-12">
+      <div @keyup.enter.prevent="processLogin" class="col-lg-12">
         <input
           v-model="password"
           type="password"
@@ -29,6 +30,7 @@
     </div>
     <div class="btn-group-vertical mt-3">
       <button
+        @keyup.enter.prevent="processLogin"
         @click.prevent="processLogin"
         type="submit"
         class="btn btn-primary"
@@ -41,6 +43,7 @@
 
 <script>
 import axios from "axios";
+axios.defaults.withCredentials = true;
 
 export default {
   name: "User-Login",
@@ -66,7 +69,7 @@ export default {
     async processLogin() {
       const host = "http://localhost:8080";
       axios
-        .post(host + "/login", {
+        .post(host + "/auth/login", {
           email: this.email,
           password: this.password,
         })
@@ -79,7 +82,12 @@ export default {
           }
         })
         .catch((reason) => {
-          alert("아이디 혹은 비밀번호를 확인해주세요1" + reason.status);
+          console.log(reason);
+          if (reason.response.status === 409) {
+            alert("이미 로그인돼 있습니다.");
+            return;
+          }
+          alert("아이디 혹은 비밀번호를 확인해주세요");
         });
     },
   },

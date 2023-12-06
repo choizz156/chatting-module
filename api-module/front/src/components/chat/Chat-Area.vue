@@ -6,11 +6,13 @@
         :key="message.id"
         :class="{
           message: true,
-          sender: message.senderId !== userId,
+          sender: message.senderId !== receiverId,
           receiver: message.senderId === receiverId,
         }"
       >
-        <p>{{ message.content }}</p>
+        <p>
+          {{ message.content }}
+        </p>
       </div>
     </div>
     <form
@@ -35,8 +37,10 @@
 </template>
 
 <script>
+import axios from "axios";
+
 export default {
-  props: ["stompClient", "userId", "receiverId", "receiverNickname", "roomId"],
+  props: ["stompClient", "receiverId", "receiverNickname", "roomId"],
   data() {
     return {
       messageForm: null,
@@ -45,6 +49,7 @@ export default {
       chatMessages: [],
       senderId: null,
       senderNickname: "",
+      failMessage: "전송 실패",
     };
   },
   computed: {
@@ -72,7 +77,7 @@ export default {
     sendMessage() {
       const messageContent = this.messageInput;
       if (messageContent && this.stompClient) {
-        const chatMessage = {
+        let chatMessage = {
           roomId: this.roomId,
           senderId: this.$store.state.senderEl.userId,
           receiverId: this.receiverId,
@@ -80,10 +85,20 @@ export default {
           receiverNickname: this.receiverNickname,
           content: messageContent,
         };
-        this.stompClient.send("/app/chat", {}, JSON.stringify(chatMessage));
-        this.addMessage(chatMessage);
-        this.messageInput = "";
-        this.scrollToBottom();
+
+        const url = "http://localhost:8083";
+        axios
+          .post(url + "/messages", chatMessage, { timeout: 5000 })
+          .then(() => {
+            this.stompClient.send("/app/chat", {}, JSON.stringify(chatMessage));
+            this.addMessage(chatMessage);
+            this.messageInput = "";
+            this.scrollToBottom();
+          })
+          .catch(() => {
+            chatMessage.content = this.failMessage;
+            alert(this.failMessage);
+          });
       }
     },
 

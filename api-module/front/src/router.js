@@ -31,19 +31,20 @@ const router = createRouter({
   history: createWebHistory(),
   routes,
 });
+
 const url = "http://localhost:8080";
 router.beforeEach((to, from, next) => {
   if (to.matched.some((record) => record.meta.needAuth)) {
     axios
-      .get(url + "/users/auth")
+      .get(url + "/auth")
       .then((response) => {
         if (response.data) {
           next();
         }
       })
       .catch(() => {
-        next({ name: "UserLogin" });
         alert("로그인이 필요합니다.");
+        next({ name: "UserLogin" });
       });
   } else {
     next();

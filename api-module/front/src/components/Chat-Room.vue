@@ -4,7 +4,7 @@
     <div class="chat-container" id="chat-page">
       <div class="users-list">
         <div class="users-list-container">
-          <h2 @click="connectUsers">Online Users</h2>
+          <h2>Online Users</h2>
           <ul id="connectedUsers">
             <connected-user
               :my-nickname="myNickname"
@@ -30,14 +30,20 @@
         </div>
         <hr class="my-2" />
         <div>
-          <a class="logout" href="javascript:void(0)" id="logout">Logout</a>
+          <button
+            @click="logout"
+            type="button"
+            class="btn btn-warning btn-outline-primary"
+          >
+            logout
+          </button>
         </div>
       </div>
       <chat-area
         :stomp-client="stompClient"
         :room-id="selectedRoomId"
-        :receiver-id="chatReceiverId"
-        :receiver-nickname="chatReceiverNickname"
+        :receiver-id="receiverId"
+        :receiver-nickname="receiverNickname"
       ></chat-area>
     </div>
   </div>
@@ -49,6 +55,8 @@ import { Stomp } from "@stomp/stompjs";
 import ConnectedUser from "@/components/chat/Connected-User.vue";
 import ChatArea from "@/components/chat/Chat-Area.vue";
 import axios from "axios";
+
+axios.defaults.withCredentials = true;
 
 export default {
   name: "Chat-Room",
@@ -64,13 +72,20 @@ export default {
       selectedRoomId: null,
       chatArea: null,
       stompClient: null,
-      chatReceiverId: null,
-      chatReceiverNickname: "",
+      receiverId: null,
+      receiverNickname: "",
       sendingUserId: null,
     };
   },
   computed: {},
   methods: {
+    async logout() {
+      await axios.delete(`http://localhost:8080/auth/logout`);
+      await axios.delete(`http://localhost:8083/logout/${this.myUserId}`);
+      this.stompClient.disconnect;
+      this.$router.push("/");
+      alert("로그아웃됐습니다.");
+    },
     nrMsg(receiverUserId) {
       return this.sendingUserId === receiverUserId;
     },
@@ -87,44 +102,50 @@ export default {
     },
 
     addMessageEvent(receiverId, receiverNickname, roomId) {
-      this.chatReceiverId = receiverId;
-      this.chatReceiverNickname = receiverNickname;
+      this.receiverId = receiverId;
+      this.receiverNickname = receiverNickname;
       this.selectedRoomId = roomId;
     },
 
-    async connectUsers() {
-      axios
-        .get("http://localhost:8083/login-users")
-        .then((resp) => {
-          let connectedUsers = resp.data;
-          this.receivers = connectedUsers.filter(
-            (user) => user.email !== this.myEmail
-          );
-        })
-        .catch(() => alert("로그인된 유저를 가지고 오지 못했습니다."));
-    },
-
     connectWebSocket() {
+      const headers = {
+        "user-info": this.myUserId,
+      };
       const socket = new SockJS("http://localhost:8083/chat");
       this.stompClient = Stomp.over(socket);
-      this.stompClient.connect({}, this.onConnected, this.onError);
+      this.stompClient.connect(headers, this.onConnected, this.onError);
     },
 
-    onConnected() {
-      this.stompClient.subscribe(
-        `/user/${this.myUserId}/queue/messages`,
-        this.receiveMessage
+    receiveErrorMessage() {
+      alert("통신 오류가 발생했습니다.");
+    },
+
+    receiveConnectedUser(payload) {
+      let connectedUsers = JSON.parse(payload.body);
+      this.receivers = connectedUsers.filter(
+        (user) => user.email !== this.myEmail
       );
-      this.stompClient.subscribe(`/user/public`, this.receiveMessage);
-      this.stompClient.send(
-        "/app/login-users",
-        {},
-        JSON.stringify({
+    },
+    onConnected() {
+      axios
+        .post("http://localhost:8083/login-users", {
           userId: this.myUserId,
           email: this.myEmail,
           nickname: this.myNickname,
         })
-      );
+        .then(() => {
+          this.stompClient.subscribe(
+            `/user/${this.myUserId}/queue/messages`,
+            this.receiveMessage
+          );
+          this.stompClient.subscribe(`/topic/error`, this.receiveErrorMessage);
+          this.stompClient.subscribe(
+            `/topic/public`,
+            this.receiveConnectedUser
+          );
+          this.stompClient.send("/app/connected-users", {}, {});
+        })
+        .catch(() => alert("로그인된 유저를 가지고 오지 못했습니다."));
     },
 
     onError() {
@@ -132,13 +153,9 @@ export default {
     },
 
     async receiveMessage(payload) {
-      await this.connectUsers();
+      // await this.connectUsers();
       const message = JSON.parse(payload.body);
-
-      if (
-        this.selectedRoomId === message.roomId &&
-        message.receiverId === this.myUserId
-      ) {
+      if (this.selectedRoomId === message.roomId) {
         this.$store.commit("addMessage", message);
         return;
       }
@@ -148,13 +165,14 @@ export default {
 
   mounted() {
     this.connectWebSocket();
-
     const userInfo = {
       email: this.myEmail,
       nickname: this.myNickname,
       userId: this.myUserId,
     };
     this.$store.commit("setUser", userInfo);
+
+    // this.connectUsers();
   },
 };
 </script>

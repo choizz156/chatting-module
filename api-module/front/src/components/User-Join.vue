@@ -45,6 +45,7 @@
 
 <script>
 import axios from "axios";
+axios.defaults.withCredentials = true;
 
 export default {
   name: "User-Join",
@@ -71,6 +72,7 @@ export default {
         })
         .catch((error) => {
           if (
+            error.response &&
             error.response.status === 400 &&
             error.response.data.data.customFieldErrors
           ) {
@@ -86,8 +88,12 @@ export default {
       alert("회원가입에 실패하였습니다." + errorField + "를 확인해주세요");
     },
     toServerError(error) {
-      const errorField2 = error.response.data.data.msg;
-      alert(errorField2);
+      if (error.response) {
+        const errorField2 = error.response.data.data.msg;
+        alert(errorField2);
+      } else {
+        alert("알 수 없는 오류가 발생했습니다.");
+      }
     },
   },
 };
