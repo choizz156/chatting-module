@@ -1,7 +1,0 @@
-services:
-  redis:
-    image: redis
-    container_name: redis_session
-    ports: 
-      - 6379:6379
-
