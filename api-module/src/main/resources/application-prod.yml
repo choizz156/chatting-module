@@ -6,9 +6,9 @@ spring:
 
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    username: choizz1
+    username: choizz
     password: 1234
-    url: jdbc:mysql://localhost:3306/choizzdb
+    url: jdbc:mysql://choizz-api1.kro.kr:3306/choizzdb
 
   data:
     redis:
@@ -24,4 +24,8 @@ server:
   servlet:
     session:
       tracking-modes: cookie
+      cookie:
+        http-only: true
+        same-site: none
+        secure: off
 
