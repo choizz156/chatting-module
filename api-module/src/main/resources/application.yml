@@ -2,8 +2,6 @@ spring:
   profiles:
     default: h2
 
-
-
 server:
   port: 8080
   servlet:

@@ -35,13 +35,13 @@ public class ChattingRoom extends BaseJpaEntity {
     private User client;
 
     public void makeChattingRoom(User host, User client){
-        if(this.host != null){
-            this.host.getHostChattingRooms().remove(this);
-        }
-
-        if(this.client != null){
-            this.client.getClientChattingRooms().remove(this);
-        }
+//        if(this.host != null){
+//            this.host.getHostChattingRooms().remove(this);
+//        }
+//
+//        if(this.client != null){
+//            this.client.getClientChattingRooms().remove(this);
+//        }
 
         this.host = host;
         this.client = client;

@@ -1,6 +1,6 @@
 rootProject.name = 'chattingmodule'
 include 'websocket-module',
         'api-module',
-        'domain-module',
-        'domain-jpa-module',
-        'chatting-mongo-module'
+        'chatting-mongo-module',
+        'domain-jpa-module'
+

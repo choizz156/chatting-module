@@ -52,6 +52,9 @@ public class LoginService {
     }
 
     public void logout(final HttpSession httpSession) {
+        if(httpSession == null){
+           return;
+        }
         httpSession.invalidate();
     }
 }
