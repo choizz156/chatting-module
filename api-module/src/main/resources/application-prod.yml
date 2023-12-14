@@ -6,9 +6,9 @@ spring:
 
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    username: choizz1
-    password: 1234
-    url: jdbc:mysql://localhost:3306/choizzdb
+    username: admin
+    password: 123qweasd
+    url: jdbc:mysql://db.clwna61sgtpo.ap-northeast-2.rds.amazonaws.com:3306/db
 
   data:
     redis:
