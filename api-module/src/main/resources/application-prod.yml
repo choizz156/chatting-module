@@ -8,7 +8,7 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: admin
     password: 123qweasd
-    url: jdbc:mysql://db.clwna61sgtpo.ap-northeast-2.rds.amazonaws.com:3306/db
+    url: jdbc:mysql://choizz-db.clwna61sgtpo.ap-northeast-2.rds.amazonaws.com:3306/db
 
   data:
     redis:
