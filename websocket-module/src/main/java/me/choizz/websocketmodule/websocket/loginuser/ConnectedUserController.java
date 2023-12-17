@@ -6,7 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import me.choizz.chattingmongomodule.dto.ConnectedUserDto;
 import me.choizz.chattingmongomodule.user.ConnectedUser;
 import me.choizz.chattingmongomodule.user.ConnectedUserService;
-import me.choizz.websocketmodule.websocket.exception.ApiResponseDto;
+import me.choizz.websocketmodule.websocket.exception.ResponseDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
@@ -29,10 +29,10 @@ public class ConnectedUserController {
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/login-users")
-    public ApiResponseDto<ConnectedUserDto> addUser(@RequestBody ConnectedUserDto dto) {
+    public ResponseDto<ConnectedUserDto> addUser(@RequestBody ConnectedUserDto dto) {
         ConnectedUser connectedUser = dto.toEntity();
         connectedUserService.connectUser(connectedUser);
-        return new ApiResponseDto<>(dto);
+        return new ResponseDto<>(dto);
     }
 
     @Scheduled(fixedDelay = 5000, initialDelay = 1000)

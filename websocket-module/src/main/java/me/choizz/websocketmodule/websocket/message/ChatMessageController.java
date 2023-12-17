@@ -9,7 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import me.choizz.chattingmongomodule.chatmessage.ChatMessage;
 import me.choizz.chattingmongomodule.chatmessage.ChatMessageService;
 import me.choizz.chattingmongomodule.dto.ChatMessageDto;
-import me.choizz.websocketmodule.websocket.exception.ApiResponseDto;
+import me.choizz.websocketmodule.websocket.exception.ResponseDto;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.MessageExceptionHandler;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -32,10 +32,10 @@ public class ChatMessageController {
 
     @ResponseStatus(CREATED)
     @PostMapping("/messages")
-    public ApiResponseDto<ChatMessageDto> addMessages(@RequestBody ChatMessageDto dto){
+    public ResponseDto<ChatMessageDto> addMessages(@RequestBody ChatMessageDto dto){
         ChatMessage chatMessage = dto.toEntity();
         chatMessageService.saveMassage(dto.roomId(), chatMessage);
-        return new ApiResponseDto<>(dto);
+        return new ResponseDto<>(dto);
     }
 
     @MessageMapping("/chat")

@@ -16,6 +16,14 @@ spring:
       password: 1234
       port: 6379
 
+    mongodb:
+      database: choizzdb
+      port: 27017
+      host: localhost
+      username: choizz
+      password: choizz
+      authentication-database: admin
+
   session:
     timeout: 1800
 

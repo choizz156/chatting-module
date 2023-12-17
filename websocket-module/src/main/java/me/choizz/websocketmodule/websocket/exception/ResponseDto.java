@@ -2,12 +2,12 @@ package me.choizz.websocketmodule.websocket.exception;
 
 import java.time.LocalDateTime;
 
-public record ApiResponseDto<T>(
+public record ResponseDto<T>(
     LocalDateTime time,
     T data
 ) {
 
-    public ApiResponseDto(final T data) {
+    public ResponseDto(final T data) {
        this(LocalDateTime.now(), data);
     }
 }
