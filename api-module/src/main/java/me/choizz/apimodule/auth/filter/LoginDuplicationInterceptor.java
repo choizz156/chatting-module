@@ -7,6 +7,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
+import me.choizz.apimodule.auth.service.SessionName;
 import org.springframework.http.MediaType;
 import org.springframework.web.servlet.HandlerInterceptor;
 
@@ -21,9 +22,10 @@ public class LoginDuplicationInterceptor implements HandlerInterceptor {
     ) throws Exception {
         HttpSession session = request.getSession(false);
 
-        if(session == null){
+        if (session == null || session.getAttribute(SessionName.LOGIN_USER.name()) == null) {
             return true;
         }
+
         log.warn("{}", session.getId());
         session.getAttributeNames().asIterator().forEachRemaining(System.out::println);
         response.setStatus(SC_CONFLICT);
