@@ -1,53 +1,53 @@
-<!--<?xml version="1.0" encoding="UTF-8"?>-->
-<!--<configuration debug="false">-->
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration debug="false">
 
-<!--  <include resource="org/springframework/boot/logging/logback/base.xml"/>-->
-<!--  <include resource="logs/console-appender.xml"/>-->
-<!--  <include resource="logs/file-appender.xml"/>-->
-<!--  <include resource="logs/json-appender.xml"/>-->
+  <include resource="org/springframework/boot/logging/logback/base.xml"/>
+  <include resource="logs/console-appender.xml"/>
+  <include resource="logs/file-appender.xml"/>
+  <include resource="logs/json-appender.xml"/>
 
-<!--  <springProfile name="local, test">-->
-<!--    <logger name="console" level="INFO">-->
-<!--      <appender-ref ref="console"/>-->
-<!--    </logger>-->
+  <springProfile name="local, test">
+    <logger name="console" level="INFO">
+      <appender-ref ref="console"/>
+    </logger>
 
-<!--    <logger name="fileLog" level="INFO">-->
-<!--      <appender-ref ref="fileLog"/>-->
-<!--    </logger>-->
+    <logger name="fileLog" level="INFO">
+      <appender-ref ref="fileLog"/>
+    </logger>
 
-<!--    <logger name="jsonLog" level="INFO">-->
-<!--      <appender-ref ref="jsonLog"/>-->
-<!--    </logger>-->
+    <logger name="jsonLog" level="INFO">
+      <appender-ref ref="jsonLog"/>
+    </logger>
 
-<!--  </springProfile>-->
-
-
-<!--  <springProfile name="prod">-->
-<!--    <logger name="fileLog" level="INFO">-->
-<!--      <appender-ref ref="fileLog"/>-->
-<!--    </logger>-->
-
-<!--    <logger name="json" level="INFO">-->
-<!--      <appender-ref ref="json"/>-->
-<!--    </logger>-->
-<!--  </springProfile>-->
+  </springProfile>
 
 
+  <springProfile name="prod">
+    <logger name="fileLog" level="INFO">
+      <appender-ref ref="fileLog"/>
+    </logger>
 
-<!--  <encoder class="net.logstash.logback.encoder.LogstashEncoder">-->
-<!--    <includeContext>true</includeContext>-->
-<!--    <includeCallerData>true</includeCallerData>-->
-<!--    <timestampPattern>yyyy-MM-dd HH:mm:ss.SSS</timestampPattern>-->
-<!--    <fieldNames>-->
-<!--      <timestamp>timestamp</timestamp>-->
-<!--      <thread>thread</thread>-->
-<!--      <message>message</message>-->
-<!--      <stackTrace>exception</stackTrace>-->
-<!--      <mdc>context</mdc>-->
-<!--    </fieldNames>-->
-<!--  </encoder>-->
+    <logger name="json" level="INFO">
+      <appender-ref ref="json"/>
+    </logger>
+  </springProfile>
 
-<!--</configuration>-->
+
+
+  <encoder class="net.logstash.logback.encoder.LogstashEncoder">
+    <includeContext>true</includeContext>
+    <includeCallerData>true</includeCallerData>
+    <timestampPattern>yyyy-MM-dd HH:mm:ss.SSS</timestampPattern>
+    <fieldNames>
+      <timestamp>timestamp</timestamp>
+      <thread>thread</thread>
+      <message>message</message>
+      <stackTrace>exception</stackTrace>
+      <mdc>context</mdc>
+    </fieldNames>
+  </encoder>
+
+</configuration>
 
 
 
