@@ -23,7 +23,7 @@ public class AuthService {
         String sessionKey = SessionKey.of(session.getId());
         LoginUser loginUser =
             (LoginUser) redisOperations.opsForHash().get(sessionKey, SessionKey.LOGIN_USER.name());
-        if (!loginUser.roles().equals("USER")) {
+        if (loginUser != null && !loginUser.roles().equals("USER")) {
             throw new ApiBusinessLogicException(ApiExceptionCode.NONE_ACCESS);
         }
     }

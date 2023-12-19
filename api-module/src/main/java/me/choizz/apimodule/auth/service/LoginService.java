@@ -69,7 +69,7 @@ public class LoginService {
     }
 
     private void removeSession(final HttpSession session, final LoginUser existSession) {
-        loginUsers.remove(existSession.email());
+        loginUsers.removeValue(existSession.email());
         sessionKeyStore.removeValue(existSession.email());
         session.invalidate();
     }
@@ -87,7 +87,7 @@ public class LoginService {
                             .get(sessionKeyStore.getValue(k), SessionKey.LOGIN_USER.name());
 
                     if (loginUser == null) {
-                        loginUsers.remove(k);
+                        loginUsers.removeValue(k);
                         sessionKeyStore.removeValue(k);
                     }
                 }

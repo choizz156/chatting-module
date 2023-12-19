@@ -7,23 +7,23 @@ import org.springframework.stereotype.Component;
 @Component
 public class LoginUsers {
 
-    private final BoundSetOperations<String, Object> loginUsers;
+    private final BoundSetOperations<String, Object> loginUserStore;
 
     public LoginUsers(RedisOperations<String, Object> redisOperations) {
-        this.loginUsers = redisOperations.boundSetOps("LoginUsers");
+        this.loginUserStore = redisOperations.boundSetOps("LoginUsers");
     }
 
-    public void remove(final String email) {
-        loginUsers.remove(email);
+    public void removeValue(final String email) {
+        loginUserStore.remove(email);
     }
 
     public void addLoginUser(final String email) {
-        loginUsers.add(email);
+        loginUserStore.add(email);
     }
 
     public boolean contains(final String email) {
-        if (loginUsers != null) {
-            return Boolean.TRUE.equals(loginUsers.isMember(email));
+        if (loginUserStore != null) {
+            return Boolean.TRUE.equals(loginUserStore.isMember(email));
         }
         return false;
     }

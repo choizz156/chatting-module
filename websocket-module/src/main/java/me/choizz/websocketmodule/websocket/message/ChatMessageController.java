@@ -40,9 +40,10 @@ public class ChatMessageController {
 
     @MessageMapping("/chat")
     public void chat(ChatMessageDto chatMessageDto) {
-        operations.convertAndSendToUser(
-            String.valueOf(chatMessageDto.receiverId()),
-            "/queue/messages",
+        log.warn("{}",chatMessageDto);
+        operations.convertAndSend("/queue/"+
+            String.valueOf(chatMessageDto.receiverId())+
+            "/messages",
             chatMessageDto
         );
     }
