@@ -16,6 +16,7 @@ spring:
       password: 1234
       port: 6379
 
+
     mongodb:
       database: choizzdb
       port: 27017

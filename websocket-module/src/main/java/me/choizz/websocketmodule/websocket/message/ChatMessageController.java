@@ -32,7 +32,7 @@ public class ChatMessageController {
 
     @ResponseStatus(CREATED)
     @PostMapping("/messages")
-    public ResponseDto<ChatMessageDto> addMessages(@RequestBody ChatMessageDto dto){
+    public ResponseDto<ChatMessageDto> addMessages(@RequestBody ChatMessageDto dto) {
         ChatMessage chatMessage = dto.toEntity();
         chatMessageService.saveMassage(dto.roomId(), chatMessage);
         return new ResponseDto<>(dto);
@@ -40,10 +40,9 @@ public class ChatMessageController {
 
     @MessageMapping("/chat")
     public void chat(ChatMessageDto chatMessageDto) {
-        log.warn("{}",chatMessageDto);
-        operations.convertAndSend("/queue/"+
-            String.valueOf(chatMessageDto.receiverId())+
-            "/messages",
+        operations.convertAndSend("/queue/" +
+                chatMessageDto.receiverId() +
+                "/messages",
             chatMessageDto
         );
     }
