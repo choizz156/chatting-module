@@ -1,7 +1,6 @@
 package me.choizz.apimodule.auth.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -39,16 +38,19 @@ public class AuthController {
     @PostMapping("/login")
     public ApiResponseDto<LoginUser> login(
         HttpServletRequest request,
-        HttpServletResponse response,
         @RequestBody LoginDto loginDto
     ) {
-        User user = loginService.login(loginDto.email(), loginDto.password());
 
+        User user = loginService.login(loginDto.email(), loginDto.password());
         HttpSession session = request.getSession();
+
+        if (loginService.isExistSession(loginDto.email(), session)) {
+            session = request.getSession();
+        }
+
         LoginUser loginUser = loginService.createSession(session, user);
         return new ApiResponseDto<>(loginUser);
     }
-
 
     @DeleteMapping("/logout")
     public String logout(HttpServletRequest request) {
