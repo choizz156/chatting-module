@@ -1,7 +1,7 @@
 spring:
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto:
     defer-datasource-initialization: on
 
   datasource:
@@ -36,4 +36,5 @@ server:
       cookie:
         same-site: none
         secure: on
+
 

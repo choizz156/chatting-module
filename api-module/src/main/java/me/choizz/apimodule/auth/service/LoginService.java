@@ -2,6 +2,7 @@ package me.choizz.apimodule.auth.service;
 
 import jakarta.servlet.http.HttpSession;
 import java.util.Enumeration;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import me.choizz.apimodule.auth.dto.LoginUser;
@@ -47,10 +48,10 @@ public class LoginService {
     public boolean isExistSession(final String email, final HttpSession session) {
         deleteExistSession(email);
 
-        LoginUser loginSession = getExistSession(session);
+        LoginUser loginUser = getExistSession(session);
 
-        if (loginSession != null) {
-            removeSession(session, loginSession);
+        if (loginUser != null) {
+            removeSession(session, loginUser);
             return true;
         }
 
@@ -75,26 +76,6 @@ public class LoginService {
     }
 
 
-    @Scheduled(fixedDelay = 3600000)
-    private void checkLeakMemory() {
-        if (!sessionKeyStore.isEmpty()) {
-            Enumeration<String> email = sessionKeyStore.getKeys();
-            email.asIterator().forEachRemaining(k ->
-                {
-                    LoginUser loginUser =
-                        (LoginUser) redisOperations
-                            .opsForHash()
-                            .get(sessionKeyStore.getValue(k), SessionKey.LOGIN_USER.name());
-
-                    if (loginUser == null) {
-                        loginUsers.removeValue(k);
-                        sessionKeyStore.removeValue(k);
-                    }
-                }
-            );
-        }
-    }
-
     private void deleteExistSession(final String email) {
         boolean isExistUser = loginUsers.contains(email);
         if (isExistUser) {
@@ -102,6 +83,7 @@ public class LoginService {
                 .opsForValue()
                 .getOperations()
                 .delete(sessionKeyStore.getValue(email));
+            log.warn("{}", sessionKeyStore.getValue(email));
         }
     }
 
@@ -120,16 +102,35 @@ public class LoginService {
     }
 
     private void addSession(final HttpSession session, final LoginUser loginUser) {
+        session.setAttribute(SessionKey.LOGIN_USER.name(), loginUser);
         String sessionKey = SessionKey.of(session.getId());
-        redisOperations.opsForHash()
-            .put(sessionKey, SessionKey.LOGIN_USER.name(), loginUser);
         sessionKeyStore.addValue(loginUser.email(), sessionKey);
         loginUsers.addLoginUser(loginUser.email());
+
+
     }
 
     private LoginUser getExistSession(final HttpSession session) {
-        String sessionKey = SessionKey.of(session.getId());
-        return (LoginUser)
-            redisOperations.opsForHash().get(sessionKey, SessionKey.LOGIN_USER.name());
+        return (LoginUser) session.getAttribute(SessionKey.LOGIN_USER.name());
+    }
+
+    @Scheduled(fixedDelay = 3600000)
+    private void checkLeakMemory() {
+        if (!sessionKeyStore.isEmpty()) {
+            Enumeration<String> email = sessionKeyStore.getKeys();
+            email.asIterator().forEachRemaining(k ->
+                {
+
+                    List<Object> values = redisOperations
+                        .opsForHash()
+                        .values(sessionKeyStore.getValue(k));
+
+                    if (values.isEmpty()) {
+                        loginUsers.removeValue(k);
+                        sessionKeyStore.removeValue(k);
+                    }
+                }
+            );
+        }
     }
 }
