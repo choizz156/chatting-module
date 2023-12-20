@@ -63,7 +63,7 @@ public class LoginService {
         }
 
         LoginUser existSession = getExistSession(session);
-        if (existSession != null){
+        if (existSession != null) {
             removeSession(session, existSession);
         }
     }
@@ -98,8 +98,10 @@ public class LoginService {
     private void deleteExistSession(final String email) {
         boolean isExistUser = loginUsers.contains(email);
         if (isExistUser) {
-            redisOperations.opsForHash()
-                .delete(sessionKeyStore.getValue(email), SessionKey.LOGIN_USER.name());
+            redisOperations
+                .opsForValue()
+                .getOperations()
+                .delete(sessionKeyStore.getValue(email));
         }
     }
 
