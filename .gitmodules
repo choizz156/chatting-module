@@ -1,0 +1,3 @@
+[submodule "api-module/src/main/resources/config"]
+	path = api-module/src/main/resources/config
+	url = https://github.com/choizz156/choizz-chatting-config.git

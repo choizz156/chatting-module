@@ -1,14 +1,15 @@
-#spring:
-#  data:
-#    mongodb:
-#      database: choizzdb
-#      port: 27017
-#      host: localhost
-#      username: choizz
-#      password: choizz
-#      authentication-database: admin
-#logging:
-#  level:
-#    org.springframework.data.mongodb: debug
+spring:
+  data:
+    mongodb:
+      database: choizzdb
+      port: 27017
+      host: localhost
+      username: choizz
+      password: ${MONGO_PASSWORD}
+      authentication-database: admin
+
+logging:
+  level:
+    org.springframework.data.mongodb: debug
 
 
