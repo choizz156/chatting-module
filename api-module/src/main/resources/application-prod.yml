@@ -7,13 +7,13 @@ spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: admin
-    password: 123qweasd
+    password: ${{ secrets.MYSQL_PASSWORD }}
     url: jdbc:mysql://choizz-db.clwna61sgtpo.ap-northeast-2.rds.amazonaws.com:3306/db
 
   data:
     redis:
       host: localhost
-      password: 1234
+      password: ${{ secrets.REDIS_PASSWORD }}
       port: 6379
 
 
@@ -22,7 +22,7 @@ spring:
       port: 27017
       host: localhost
       username: choizz
-      password: choizz
+      password: ${{ secrets.MONGO_PASSWORD }}
       authentication-database: admin
 
   session:
