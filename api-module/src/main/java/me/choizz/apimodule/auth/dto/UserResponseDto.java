@@ -1,6 +1,7 @@
 package me.choizz.apimodule.auth.dto;
 
 import lombok.Builder;
+import me.choizz.chattingredismodule.dto.LoginUser;
 import me.choizz.domainjpamodule.user.User;
 
 @Builder

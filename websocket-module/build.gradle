@@ -18,8 +18,6 @@ repositories {
 }
 
 dependencies {
-//    implementation 'org.springframework.boot:spring-boot-starter'
-//    testImplementation 'org.springframework.boot:spring-boot-starter-test'
 
     //websocket
     implementation 'org.springframework.boot:spring-boot-starter-websocket'
@@ -37,6 +35,7 @@ dependencies {
     implementation 'net.logstash.logback:logstash-logback-encoder:7.4'
 
     implementation project(':chatting-mongo-module');
+    implementation project(':chatting-redis-module');
 }
 
 tasks.named('test') {

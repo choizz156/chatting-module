@@ -1,7 +1,9 @@
-package me.choizz.apimodule.auth.service;
+package me.choizz.chattingredismodule.session;
 
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
+@Getter
 @RequiredArgsConstructor
 public enum SessionKey {
     LOGIN_USER("LOGIN_USER"),

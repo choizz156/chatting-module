@@ -17,13 +17,15 @@ import org.springframework.scheduling.annotation.EnableScheduling;
     "me.choizz.apimodule",
     "me.choizz.domainjpamodule",
     "me.choizz.websocketmodule",
-    "me.choizz.chattingmongomodule"
+    "me.choizz.chattingmongomodule",
+    "me.choizz.chattingredismodule"
 })
 @EnableJpaRepositories(basePackages = "me.choizz.domainjpamodule")
 @EntityScan("me.choizz.domainjpamodule")
 public class ApiModuleApplication {
 
     private final RedisTemplate<String, Object> redisTemplate;
+
     public static void main(String[] args) {
         SpringApplication.run(ApiModuleApplication.class, args);
     }

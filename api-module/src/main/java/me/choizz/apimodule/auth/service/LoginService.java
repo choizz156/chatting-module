@@ -1,17 +1,17 @@
 package me.choizz.apimodule.auth.service;
 
 import jakarta.servlet.http.HttpSession;
-import java.util.Enumeration;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import me.choizz.apimodule.auth.dto.LoginUser;
+import me.choizz.chattingredismodule.dto.LoginUser;
+import me.choizz.chattingredismodule.session.LoginUsers;
+import me.choizz.chattingredismodule.session.SessionKey;
+import me.choizz.chattingredismodule.session.SessionKeyStore;
 import me.choizz.domainjpamodule.exception.ApiBusinessLogicException;
 import me.choizz.domainjpamodule.exception.ApiExceptionCode;
 import me.choizz.domainjpamodule.user.User;
 import me.choizz.domainjpamodule.user.UserRepository;
 import org.springframework.data.redis.core.RedisOperations;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -70,7 +70,7 @@ public class LoginService {
     }
 
     private void removeSession(final HttpSession session, final LoginUser existSession) {
-        loginUsers.removeValue(existSession.email());
+        loginUsers.removeValue(existSession);
         sessionKeyStore.removeValue(existSession.email());
         session.invalidate();
     }
@@ -105,32 +105,12 @@ public class LoginService {
         session.setAttribute(SessionKey.LOGIN_USER.name(), loginUser);
         String sessionKey = SessionKey.of(session.getId());
         sessionKeyStore.addValue(loginUser.email(), sessionKey);
-        loginUsers.addLoginUser(loginUser.email());
-
-
+        loginUsers.addLoginUser(loginUser);
     }
+
 
     private LoginUser getExistSession(final HttpSession session) {
         return (LoginUser) session.getAttribute(SessionKey.LOGIN_USER.name());
     }
 
-    @Scheduled(fixedDelay = 3600000)
-    private void checkLeakMemory() {
-        if (!sessionKeyStore.isEmpty()) {
-            Enumeration<String> email = sessionKeyStore.getKeys();
-            email.asIterator().forEachRemaining(k ->
-                {
-
-                    List<Object> values = redisOperations
-                        .opsForHash()
-                        .values(sessionKeyStore.getValue(k));
-
-                    if (values.isEmpty()) {
-                        loginUsers.removeValue(k);
-                        sessionKeyStore.removeValue(k);
-                    }
-                }
-            );
-        }
-    }
 }
