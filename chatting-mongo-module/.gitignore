@@ -372,4 +372,5 @@ gradle-app.setting
 settings.gradle
 HELP.md
 gradlew
-!/chattingserver/docker-compose.yml
+
+application-mongodb.yml
