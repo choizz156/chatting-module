@@ -7,5 +7,5 @@ import org.springframework.data.mongodb.repository.config.EnableMongoRepositorie
 @Configuration
 @EnableMongoAuditing
 @EnableMongoRepositories(basePackages = "me.choizz.chattingmongomodule")
-public  class MongoConfig {
+public class MongoConfig {
 }

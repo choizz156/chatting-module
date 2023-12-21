@@ -1,9 +1,9 @@
 package me.choizz.chattingmongomodule.dto;
 
-import java.time.LocalDateTime;
 import me.choizz.chattingmongomodule.chatmessage.ChatMessage;
 
 public record ChatMessageDto(
+    String id,
     Long roomId,
     Long senderId,
     Long receiverId,
@@ -18,7 +18,6 @@ public record ChatMessageDto(
             .senderNickname(senderNickname())
             .receiverNickname(receiverNickname())
             .content(content())
-            .createAt(LocalDateTime.now())
             .build();
     }
 }

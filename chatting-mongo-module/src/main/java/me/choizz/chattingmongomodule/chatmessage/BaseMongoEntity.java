@@ -8,5 +8,5 @@ import org.springframework.data.annotation.CreatedDate;
 public abstract class BaseMongoEntity {
 
     @CreatedDate
-    LocalDateTime createdAt;
+    private LocalDateTime createdAt;
 }

@@ -50,6 +50,5 @@ public class ChattingRoomService {
     }
 
     private record ChattingUser(User host, User client) {
-
     }
 }
