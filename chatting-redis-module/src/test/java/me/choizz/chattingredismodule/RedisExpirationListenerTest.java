@@ -10,6 +10,7 @@ import me.choizz.chattingredismodule.dto.LoginUser;
 import me.choizz.chattingredismodule.listener.RedisExpirationListener;
 import me.choizz.chattingredismodule.session.LoginUsers;
 import me.choizz.chattingredismodule.session.SessionKeyStore;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -37,7 +38,7 @@ class RedisExpirationListenerTest {
     private static StatefulRedisConnection<String, String> connection;
     private static RedisCommands<String, String> syncCommands;
 
-
+    @DisplayName("RedisExpirationListener가 동작하면 loginUsers와 sessionKey가 삭제된다.")
     @Test
     void test() throws Exception {
         String email = "expiredKey";
@@ -61,6 +62,7 @@ class RedisExpirationListenerTest {
     }
 
 
+    @DisplayName("redis 세션 기한이 지났을 때, RedisExpirationListener가 작동한다.")
     @Test
     void test2() throws Exception {
         String email = "email";
