@@ -30,7 +30,7 @@ jobs:
         cache-read-only: false
     
     - name: zip project file
-      run: zip -r ./$GITHUB_SHA.zip .
+      run: zip -r ./chatting-api.zip .
 
     - name: access to AWS
       uses: aws-actions/configure-aws-credentials@v2
@@ -40,6 +40,12 @@ jobs:
         aws-region: ap-northeast-2
 
     - name: Upload to S3
-      run: aws s3 cp --region ap-northeast-2 ./$GITHUB_SHA.zip s3://${{ secrets.S3_BUCKET_NAME }}/${{ env.S3_BUCKET_DIR_NAME }}/$GITHUB_SHA.zip
+      run: aws s3 cp --region ap-northeast-2 ./chatting-api.zip s3://${{ secrets.S3_BUCKET_NAME }}/chatting-api.zip
 
+    - name: Deploy to EC2 with CodeDeploy
+      run: aws deploy create-deployment
+        --application-name codedeploy
+        --deployment-config-name CodeDeployDefault.AllAtOnce
+        --deployment-group-name codedeploy-api
+        --s3-location bucket=${{ secrets.S3_BUCKET_NAME }}, bundleType=zip, key=chatting-api.zip
     
