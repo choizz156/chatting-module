@@ -47,5 +47,9 @@ jobs:
         --application-name codedeploy
         --deployment-config-name CodeDeployDefault.AllAtOnce
         --deployment-group-name codedeploy-api
-        --s3-location bucket=${{ secrets.S3_BUCKET_NAME }}, bundleType=zip, key=chatting-api.zip
+        --s3-location bucket=${{ secrets.S3_BUCKET_NAME }}, bundleType=application/zip, key=/chatting-api.zip
+
+
+
+
     
