@@ -24,5 +24,5 @@ IDLE_PROFILE=$(find_idle_profile)
 
 echo -e "${txtred} >> $JAR_NAME를 profile=$IDLE_PROFILE 로 실행"
 
- nohup java -jar -Dspring.profiles.active=$IDLE_PROFILE ${JAR_NAME} > $REPOSITORY/nohup.out 2>&1 &
-  echo -e "${txtgrn}============finish deploying!========$(pgrep -f java)"
+nohup java -jar -Dspring.profiles.active=$IDLE_PROFILE ${JAR_NAME} > $REPOSITORY/nohup.out 2>&1 &
+echo -e "${txtgrn}============finish deploying!========$(pgrep -f java)"

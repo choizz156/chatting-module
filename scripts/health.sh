@@ -14,8 +14,8 @@ source ${ABSDIR}/switch.sh
 IDLE_PORT=$(find_idle_port)
 
 echo -e "${txtpur} health check start"
-echo -e "${txtpur} IDLE_PORT: $IDLE_PORT"
-echo "curl -s https://choizz-chat.r-e.kr/profile"
+echo -e "${txtpur} IDLE_PORT: $IDLE_PORT" # 8081? 8082
+
 
 sleep 10
 

@@ -9,14 +9,13 @@ ABSPATH=$(readlink -f $0)
 ABSDIR=$(dirname $ABSPATH)
 source ${ABSDIR}/profile.sh
 
-IDLE_PORT = $(find_idle_port)
+IDLE_PORT=$(find_idle_port)
 
 echo -e "${txtpur} >> $IDLE_PORT에서 구동 중인 pid 확인"
-IDLE_PID = $(lsof -ti tcp:${IDLE_PORT})
-
+IDLE_PID=$(lsof -i :${IDLE_PORT} -t)
 
 if [ -z ${IDLE_PID}  ]; then
-  echo -e "${txtgrn} >> 구동 중인 애플리케이션이 없습니다."
+  echo -e "${txtgrn} >> 해당 포트에서 구동 중인 애플리케이션이 없습니다."
 else
   echo -e "${txtgrn} >> kill -15 $IDLE_PID"
   kill -15 ${IDLE_PID}

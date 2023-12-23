@@ -15,14 +15,12 @@ function switch_proxy(){
   echo -e "${txtpur} 전환할 port: $IDLE_PORT"
   echo -e "${txtpur} port 전환"
 
-  NGINX_CONTAINER="reverse_proxy"
 
-  docker exec -i $NGINX_CONTAINER /bin/bash <<'EOF'
-  echo "set \$service_url http://172.17.0.1:${IDLE_PORT};" |
+ docker exec -i reverse_proxy /bin/bash <<EOF
+  echo "set \\\$service_url http://172.17.0.1:${IDLE_PORT};" |
   tee /etc/nginx/conf.d/service-url.inc
   nginx -s reload
 EOF
-
   echo -e "${txtpur} nginx reload"
 }
 
