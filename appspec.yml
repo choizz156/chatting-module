@@ -2,7 +2,7 @@ version: 0.0
 os: linux
 files:
   - source: /
-    destination: /home/ubuntu/deploy/zip/
+    destination: /home/ubuntu/no-stop/zip/
 file_exists_behavior: OVERWRITE
 
 permissions:
@@ -12,7 +12,17 @@ permissions:
     group: root
 
 hooks:
+  AfterInstall:
+    - location: scripts/stop.sh
+      timeout: 60
+      runas: root
+
   ApplicationStart:
-    - location: scripts/deploy.sh
+    - location: scripts/start.sh
+      timeout: 60
+      runas: root
+
+  ValidateService:
+    - location: scripts/health.sh
       timeout: 60
       runas: root

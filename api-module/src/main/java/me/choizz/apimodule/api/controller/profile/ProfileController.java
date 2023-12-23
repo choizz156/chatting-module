@@ -15,9 +15,11 @@ public class ProfileController {
     @GetMapping("/profile")
     public String profile() {
         List<String> activeProfiles = List.of(environment.getActiveProfiles());
+        List<String> prod = List.of("prod", "prod1", "prod2");
         String defaultProfile = activeProfiles.isEmpty() ? "default" : activeProfiles.get(0);
+
         return activeProfiles.stream()
-            .filter(p -> p.contains("prod"))
+            .filter(prod::contains)
             .findAny()
             .orElse(defaultProfile);
     }
