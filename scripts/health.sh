@@ -36,6 +36,11 @@ do
 
   if[ ${RETRY_COUNT} -eq 10 ]
   then
+    echo -e "${txtpur} health check 실패"
+    echo -e "${txtpur} 엔진엑스에 연결하지 않고 배포를 종료"
+    exit 1
+  fi
     echo -e "${txtpur} health check 연결 실패  재시도"
     sleep 10
+  done
 
