@@ -7,6 +7,7 @@ txtgrey='\033[1;30m'
 
 function find_idle_profile(){
   RESPONSE_CODE=$(curl -s -o /dev/null -w "%{http_code}" https://choizz-chat.r-e.kr/profile)
+  echo "RESPONSE_CODE: $RESPONSE_CODE"
 
   if [ ${RESPONSE_CODE} -ge 400 ]
   then
