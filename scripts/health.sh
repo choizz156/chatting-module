@@ -6,16 +6,16 @@ txtpur='\033[1;35m'
 txtgrn='\033[1;32m'
 txtgrey='\033[1;30m'
 
-ABSPATH = $(readlink -f $0)
-ABSDIR = $(dirname $ABSPATH)
+ABSPATH=$(readlink -f $0)
+ABSDIR=$(dirname $ABSPATH)
 source ${ABSDIR}/profile.sh
 source ${ABSDIR}/switch.sh
 
-IDLE_PORT = $(find_idle_port)
+IDLE_PORT=$(find_idle_port)
 
 echo -e "${txtpur} health check start"
 echo -e "${txtpur} IDLE_PORT: $IDLE_PORT"
-echo "curl -s https://choizz-chat.r-e.kr:$IDLE_PORT/profile"
+echo "curl -s https://choizz-chat.r-e.kr/profile"
 
 sleep 10
 
@@ -26,7 +26,7 @@ do
 
   if [ ${UP_COUNT} -ge 1 ]
   then
-    echo -d "${txtpur} health check 성공"
+    echo -e "${txtpur} health check 성공"
     switch_proxy
     break
   else
@@ -34,7 +34,7 @@ do
    echo -e "${txtpur} health check: ${RESPONSE}"
   fi
 
-  if[ ${RETRY_COUNT} -eq 10 ]
+  if [ ${RETRY_COUNT} -eq 10 ]
   then
     echo -e "${txtpur} health check 실패"
     echo -e "${txtpur} 엔진엑스에 연결하지 않고 배포를 종료"

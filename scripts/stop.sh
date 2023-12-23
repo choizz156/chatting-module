@@ -5,8 +5,8 @@ txtpur='\033[1;35m'
 txtgrn='\033[1;32m'
 txtgrey='\033[1;30m'
 
-ABSPATH = $(readlink -f $0)
-ABSDIR = $(dirname $ABSPATH)
+ABSPATH=$(readlink -f $0)
+ABSDIR=$(dirname $ABSPATH)
 source ${ABSDIR}/profile.sh
 
 IDLE_PORT = $(find_idle_port)

@@ -5,8 +5,8 @@ txtpur='\033[1;35m'
 txtgrn='\033[1;32m'
 txtgrey='\033[1;30m'
 
-ABSPATH = $(readlink -f $0)
-ABSDIR = $(dirname $ABSPATH)
+ABSPATH=$(readlink -f $0)
+ABSDIR=$(dirname $ABSPATH)
 source ${ABSDIR}/profile.sh
 
 REPOSITORY=/home/ubuntu/
@@ -20,12 +20,9 @@ echo -e "${txtred} >> JAR_NAME: $JAR_NAME"
 echo -e "${txtred} >> $JAR_NAME에 실행 권한 추가"
 chmod +x $JAR_NAME
 
-echo -e "${txtred} >> $JAR_NAME 실행"
-
-
+IDLE_PROFILE=$(find_idle_profile)
 
 echo -e "${txtred} >> $JAR_NAME를 profile=$IDLE_PROFILE 로 실행"
 
-
- nohup java -jar -Dspring.profiles.active=IDLE_PROFILE ${JAR_NAME} > $REPOSITORY/nohup.out 2>&1 &
+ nohup java -jar -Dspring.profiles.active=$IDLE_PROFILE ${JAR_NAME} > $REPOSITORY/nohup.out 2>&1 &
   echo -e "${txtgrn}============finish deploying!========$(pgrep -f java)"
