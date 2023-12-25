@@ -55,7 +55,7 @@ public class SecurityConfig {
                 .changeSessionId()
                 .maximumSessions(1)
                 .maxSessionsPreventsLogin(false)
-                .expiredUrl("http://localhost:3000/login")
+               .expiredUrl("https://choizz-chatting.vercel.app/login")
             )
             .addFilterBefore(emailPasswordAuthFilter(), UsernamePasswordAuthenticationFilter.class)
             .exceptionHandling(e -> {
