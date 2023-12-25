@@ -2,14 +2,10 @@ package me.choizz.chattingredismodule;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import io.lettuce.core.RedisClient;
-import io.lettuce.core.api.StatefulRedisConnection;
-import io.lettuce.core.api.sync.RedisCommands;
 import java.time.Duration;
 import me.choizz.chattingredismodule.dto.LoginUser;
 import me.choizz.chattingredismodule.listener.RedisExpirationListener;
 import me.choizz.chattingredismodule.session.LoginUsers;
-import me.choizz.chattingredismodule.session.SessionKeyStore;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,16 +23,9 @@ class RedisExpirationListenerTest {
     @Autowired
     private RedisExpirationListener redisExpirationListener;
     @Autowired
-    private SessionKeyStore sessionKeyStore;
-    @Autowired
     private LoginUsers loginUsers;
-
     @Autowired
     private RedisTemplate<String,Object> redisTemplate;
-
-    private static RedisClient redisClient;
-    private static StatefulRedisConnection<String, String> connection;
-    private static RedisCommands<String, String> syncCommands;
 
     @DisplayName("RedisExpirationListener가 동작하면 loginUsers와 sessionKey가 삭제된다.")
     @Test
@@ -44,21 +33,22 @@ class RedisExpirationListenerTest {
         String email = "expiredKey";
         String key = "sessionKey";
 
-        sessionKeyStore.addValue(email, key);
         LoginUser loginUser =
             LoginUser.builder()
+                .sessionId(key)
                 .email(email)
                 .roles("USER")
                 .nickname("test")
                 .userId(1L)
                 .build();
+
         loginUsers.addLoginUser(loginUser);
 
         Message message = new DefaultMessage("__keyevent@*__:expired".getBytes(), key.getBytes());
         redisExpirationListener.onMessage(message, null);
 
         assertThat(loginUsers.get()).isEmpty();
-        assertThat(sessionKeyStore.isEmpty()).isTrue();
+
     }
 
 
@@ -67,11 +57,11 @@ class RedisExpirationListenerTest {
     void test2() throws Exception {
         String email = "email";
         String sessionKey = "sessionKey";
-        redisTemplate.opsForValue().set(sessionKey,email);
+        redisTemplate.opsForValue().set(sessionKey, email);
 
-        sessionKeyStore.addValue(email, sessionKey);
         LoginUser loginUser =
             LoginUser.builder()
+                .sessionId(sessionKey)
                 .email(email)
                 .roles("USER")
                 .nickname("test")
@@ -85,7 +75,6 @@ class RedisExpirationListenerTest {
         Thread.sleep(3000L);
 
         assertThat(loginUsers.get()).isEmpty();
-        assertThat(sessionKeyStore.isEmpty()).isTrue();
     }
 
 }

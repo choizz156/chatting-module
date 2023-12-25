@@ -22,8 +22,8 @@ public class ConnectedUserController {
 
     @Scheduled(fixedDelay = 3000, initialDelay = 200)
     public void getConnectedUsers() {
-        Set<LoginUser> loginUsers = this.loginUsers.get();
-        operations.convertAndSend("/topic/public", loginUsers);
+        Set<LoginUser> connectedUsers = this.loginUsers.get();
+        operations.convertAndSend("/topic/public", connectedUsers);
     }
 
     @MessageExceptionHandler
