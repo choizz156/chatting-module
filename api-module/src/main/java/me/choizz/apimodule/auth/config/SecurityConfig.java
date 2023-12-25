@@ -1,14 +1,14 @@
-package me.choizz.apimodule.auth2.config;
+package me.choizz.apimodule.auth.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import me.choizz.apimodule.auth2.UserDetailsVerification;
-import me.choizz.apimodule.auth2.filter.EmailPasswordAuthFilter;
-import me.choizz.apimodule.auth2.handler.AuthDeniedHandler;
-import me.choizz.apimodule.auth2.handler.AuthEntryPointHandler;
-import me.choizz.apimodule.auth2.handler.AuthFailureHandler;
-import me.choizz.apimodule.auth2.handler.AuthSuccessHandler;
+import me.choizz.apimodule.auth.UserDetailsVerification;
+import me.choizz.apimodule.auth.filter.EmailPasswordAuthFilter;
+import me.choizz.apimodule.auth.handler.AuthDeniedHandler;
+import me.choizz.apimodule.auth.handler.AuthEntryPointHandler;
+import me.choizz.apimodule.auth.handler.AuthFailureHandler;
+import me.choizz.apimodule.auth.handler.AuthSuccessHandler;
 import me.choizz.chattingredismodule.session.LoginUsers;
 import org.springframework.boot.web.servlet.ServletListenerRegistrationBean;
 import org.springframework.context.annotation.Bean;

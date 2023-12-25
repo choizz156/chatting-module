@@ -1,4 +1,4 @@
-package me.choizz.apimodule.auth2.filter;
+package me.choizz.apimodule.auth.filter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.ServletException;

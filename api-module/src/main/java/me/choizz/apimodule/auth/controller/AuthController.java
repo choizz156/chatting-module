@@ -21,23 +21,6 @@ public class AuthController {
         return ResponseEntity.ok(true);
     }
 
-//    @PostMapping("/login")
-//    public ApiResponseDto<LoginUser> login(
-//        HttpServletRequest request,
-//        @RequestBody LoginDto loginDto
-//    ) {
-//
-//        User user = loginService.login(loginDto.email(), loginDto.password());
-//        HttpSession session = request.getSession();
-//
-//        if (loginService.isExistSession(loginDto.email(), session)) {
-//            session = request.getSession();
-//        }
-//
-//        LoginUser loginUser = loginService.createSession(session, user);
-//        return new ApiResponseDto<>(loginUser);
-//    }
-//
     @DeleteMapping("/logout")
     public String logout(HttpServletRequest request) {
         HttpSession session = request.getSession(false);

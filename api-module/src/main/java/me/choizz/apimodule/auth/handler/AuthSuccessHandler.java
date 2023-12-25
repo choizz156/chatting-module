@@ -1,4 +1,4 @@
-package me.choizz.apimodule.auth2.handler;
+package me.choizz.apimodule.auth.handler;
 
 import static jakarta.servlet.http.HttpServletResponse.SC_OK;
 import static java.nio.charset.StandardCharsets.UTF_8;
@@ -13,8 +13,8 @@ import java.io.IOException;
 import lombok.RequiredArgsConstructor;
 import me.choizz.apimodule.api.controller.dto.ApiResponseDto;
 import me.choizz.apimodule.auth.dto.UserResponseDto;
-import me.choizz.apimodule.auth2.UserAttribute;
-import me.choizz.apimodule.auth2.UserPrincipal;
+import me.choizz.apimodule.auth.UserAttribute;
+import me.choizz.apimodule.auth.UserPrincipal;
 import me.choizz.chattingredismodule.dto.LoginUser;
 import me.choizz.chattingredismodule.session.LoginUsers;
 import org.springframework.security.core.Authentication;

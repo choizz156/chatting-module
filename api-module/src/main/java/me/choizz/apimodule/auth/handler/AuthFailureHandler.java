@@ -1,6 +1,6 @@
-package me.choizz.apimodule.auth2.handler;
+package me.choizz.apimodule.auth.handler;
 
-import static me.choizz.apimodule.auth2.handler.AuthErrorResponseSender.sendError;
+import static me.choizz.apimodule.auth.handler.AuthErrorResponseSender.sendError;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 
 import com.fasterxml.jackson.databind.ObjectMapper;

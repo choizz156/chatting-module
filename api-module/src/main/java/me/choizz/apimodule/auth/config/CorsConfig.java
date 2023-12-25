@@ -1,4 +1,4 @@
-package me.choizz.apimodule.auth2.config;
+package me.choizz.apimodule.auth.config;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;

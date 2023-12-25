@@ -1,4 +1,4 @@
-package me.choizz.apimodule.auth2.handler;
+package me.choizz.apimodule.auth.handler;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static lombok.AccessLevel.PRIVATE;

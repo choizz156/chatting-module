@@ -1,7 +1,7 @@
-package me.choizz.apimodule.auth2.handler;
+package me.choizz.apimodule.auth.handler;
 
 
-import static me.choizz.apimodule.auth2.handler.AuthErrorResponseSender.sendError;
+import static me.choizz.apimodule.auth.handler.AuthErrorResponseSender.sendError;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.ServletException;
