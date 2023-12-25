@@ -2,7 +2,6 @@ package me.choizz.chattingredismodule.listener;
 
 import lombok.extern.slf4j.Slf4j;
 import me.choizz.chattingredismodule.session.LoginUsers;
-import me.choizz.chattingredismodule.session.SessionKeyStore;
 import org.springframework.data.redis.connection.Message;
 import org.springframework.data.redis.connection.MessageListener;
 import org.springframework.data.redis.listener.KeyExpirationEventMessageListener;
