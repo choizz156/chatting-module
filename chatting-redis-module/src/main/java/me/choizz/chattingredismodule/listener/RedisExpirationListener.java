@@ -12,8 +12,6 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @Component
 public class RedisExpirationListener extends KeyExpirationEventMessageListener {
-
-    private final SessionKeyStore sessionKeyStore;
     private final LoginUsers loginUsers;
 
     /**
@@ -23,21 +21,15 @@ public class RedisExpirationListener extends KeyExpirationEventMessageListener {
      */
     public RedisExpirationListener(
         final RedisMessageListenerContainer listenerContainer,
-        final SessionKeyStore sessionKeyStore,
         final LoginUsers loginUsers
     ) {
         super(listenerContainer);
-        this.sessionKeyStore = sessionKeyStore;
         this.loginUsers = loginUsers;
     }
 
-
-
     @Override
     public void onMessage(final Message message, final byte[] pattern) {
-        String value = message.toString();
-        String email = sessionKeyStore.findKey(value);
-        sessionKeyStore.removeEntry(value);
-        loginUsers.removeValue(email);
+        String key = message.toString();
+        loginUsers.removeValue(key);
     }
 }

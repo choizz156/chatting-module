@@ -8,11 +8,15 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 import lombok.RequiredArgsConstructor;
 import me.choizz.apimodule.api.controller.dto.ApiResponseDto;
 import me.choizz.apimodule.auth.dto.UserResponseDto;
+import me.choizz.apimodule.auth2.UserAttribute;
 import me.choizz.apimodule.auth2.UserPrincipal;
+import me.choizz.chattingredismodule.dto.LoginUser;
+import me.choizz.chattingredismodule.session.LoginUsers;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 
@@ -20,6 +24,7 @@ import org.springframework.security.web.authentication.AuthenticationSuccessHand
 public class AuthSuccessHandler implements AuthenticationSuccessHandler {
 
     private final ObjectMapper objectMapper;
+    private final LoginUsers loginUsers;
 
     @Override
     public void onAuthenticationSuccess(
@@ -28,7 +33,8 @@ public class AuthSuccessHandler implements AuthenticationSuccessHandler {
         final Authentication authentication
     ) throws IOException, ServletException {
 
-        UserPrincipal principal = (UserPrincipal) authentication.getPrincipal();
+        LoginUser loginUser = addLoginUser(request, authentication);
+
         response.setContentType(APPLICATION_JSON_VALUE);
         response.setCharacterEncoding(UTF_8.name());
         response.setStatus(SC_OK);
@@ -36,10 +42,28 @@ public class AuthSuccessHandler implements AuthenticationSuccessHandler {
         String userData =
             objectMapper.writeValueAsString(
                 new ApiResponseDto<>(
-                    UserResponseDto.of(principal.getUserAttribute())
+                    UserResponseDto.of(loginUser)
                 )
             );
 
         response.getWriter().write(userData);
+    }
+
+    private LoginUser addLoginUser(
+        final HttpServletRequest request,
+        final Authentication authentication
+    ) {
+        HttpSession session = request.getSession(false);
+        UserPrincipal principal = (UserPrincipal) authentication.getPrincipal();
+        UserAttribute userAttribute = principal.getUserAttribute();
+        LoginUser loginUser = LoginUser.builder()
+            .sessionId(session.getId())
+            .userId(userAttribute.userId())
+            .nickname(userAttribute.nickname())
+            .email(userAttribute.email())
+            .build();
+
+        loginUsers.addLoginUser(loginUser);
+        return loginUser;
     }
 }

@@ -9,6 +9,7 @@ import me.choizz.apimodule.auth2.handler.AuthDeniedHandler;
 import me.choizz.apimodule.auth2.handler.AuthEntryPointHandler;
 import me.choizz.apimodule.auth2.handler.AuthFailureHandler;
 import me.choizz.apimodule.auth2.handler.AuthSuccessHandler;
+import me.choizz.chattingredismodule.session.LoginUsers;
 import org.springframework.boot.web.servlet.ServletListenerRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -40,6 +41,7 @@ public class SecurityConfig {
 
     private final ObjectMapper objectMapper;
     private final UserDetailsVerification userDetailsVerification;
+    private final LoginUsers loginUsers;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -66,7 +68,6 @@ public class SecurityConfig {
                 auth.anyRequest().permitAll();
             });
 
-
         return http.build();
     }
 
@@ -75,7 +76,7 @@ public class SecurityConfig {
 
         EmailPasswordAuthFilter filter = new EmailPasswordAuthFilter("/auth/login", objectMapper);
         filter.setAuthenticationManager(authenticationManager());
-        filter.setAuthenticationSuccessHandler(new AuthSuccessHandler(objectMapper));
+        filter.setAuthenticationSuccessHandler(new AuthSuccessHandler(objectMapper, loginUsers));
         filter.setAuthenticationFailureHandler(new AuthFailureHandler(objectMapper));
         filter.setSecurityContextRepository(new HttpSessionSecurityContextRepository());
         filter.setSessionAuthenticationStrategy(sessionAuthenticationStrategy());
@@ -119,7 +120,8 @@ public class SecurityConfig {
     }
 
     @Bean
-    public ServletListenerRegistrationBean<HttpSessionEventPublisher> httpSessionEventPublisher() {
+    public static ServletListenerRegistrationBean<HttpSessionEventPublisher> httpSessionEventPublisher() {
         return new ServletListenerRegistrationBean<>(new HttpSessionEventPublisher());
     }
 }
+

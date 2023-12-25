@@ -1,16 +1,22 @@
 package me.choizz.apimodule.auth.dto;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import lombok.Builder;
-import me.choizz.apimodule.auth2.UserAttribute;
 import me.choizz.chattingredismodule.dto.LoginUser;
 import me.choizz.domainjpamodule.user.User;
 import me.choizz.domainjpamodule.user.UserRole;
 
 @Builder
+@JsonInclude(Include.NON_EMPTY)
 public record UserResponseDto(String email, String nickname, Long userId, UserRole userRole) {
 
     public static UserResponseDto of(final LoginUser user) {
-        return UserResponseDto.builder().email(user.email()).userId(user.userId()).build();
+        return UserResponseDto.builder()
+            .email(user.email())
+            .userId(user.userId())
+            .nickname(user.nickname())
+            .build();
     }
 
     public static UserResponseDto of(final User user) {
@@ -21,14 +27,4 @@ public record UserResponseDto(String email, String nickname, Long userId, UserRo
             user.getRoles()
         );
     }
-
-    public static UserResponseDto of(final UserAttribute user) {
-        return new UserResponseDto(
-            user.email(),
-            user.nickname(),
-            user.userId(),
-            user.userRole()
-        );
-    }
-
 }

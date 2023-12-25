@@ -6,8 +6,13 @@ import lombok.Builder;
 
 
 @Builder
-public record LoginUser(Long userId, String email, String nickname, String roles) implements
-    Serializable {
+public record LoginUser(
+    String sessionId,
+    Long userId,
+    String email,
+    String nickname,
+    String roles
+) implements Serializable {
 
     @Override
     public boolean equals(final Object o) {

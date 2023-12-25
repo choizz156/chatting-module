@@ -20,7 +20,7 @@ public class ConnectedUserController {
     private final SimpMessageSendingOperations operations;
     private final LoginUsers loginUsers;
 
-    @Scheduled(fixedDelay = 5000, initialDelay = 200)
+    @Scheduled(fixedDelay = 3000, initialDelay = 200)
     public void getConnectedUsers() {
         Set<LoginUser> loginUsers = this.loginUsers.get();
         operations.convertAndSend("/topic/public", loginUsers);
@@ -31,5 +31,4 @@ public class ConnectedUserController {
     public String handler(Exception e) {
         return "통신 장애";
     }
-
 }

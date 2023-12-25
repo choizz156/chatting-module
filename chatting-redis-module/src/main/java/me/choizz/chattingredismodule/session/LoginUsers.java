@@ -25,23 +25,23 @@ public class LoginUsers {
         loginUserStore.remove(loginUser);
     }
 
-    public void removeValue(final String email) {
+    public void removeValue(final String key) {
         Set<Object> members = loginUserStore.members();
         if (members != null) {
             members.stream().map(o -> (LoginUser) o)
-                .filter(o -> o.email().equals(email))
+                .filter(o -> o.sessionId().equals(key))
                 .findAny()
                 .ifPresent(this::removeValue);
         }
     }
 
-    public boolean contains(final String email) {
+    public boolean contains(final String key) {
         Set<Object> members = loginUserStore.members();
         return
             members != null &&
                 members.stream()
                     .map(o -> (LoginUser) o)
-                    .anyMatch(o -> o.email().equals(email));
+                    .anyMatch(o -> o.sessionId().equals(key));
     }
 
     public Set<LoginUser> get() {
