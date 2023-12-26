@@ -1,6 +1,5 @@
 package me.choizz.apimodule.aop;
 
-import java.util.UUID;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.AfterReturning;
@@ -30,13 +29,11 @@ public class LogAspect {
     @AfterReturning(value = "exceptionLog()", returning = "result")
     public void exceptionLog(JoinPoint joinpoint, Object result) {
         logger.info("exception result => {}", result);
-        MDC.clear();
     }
 
     @Before("controllerLog()")
     public void requestLogging(JoinPoint joinpoint) {
         log.error("requestLogging");
-        MDC.put(MdcKey.TRACE_ID.name(), UUID.randomUUID().toString());
         MDC.put(MdcKey.TARGET.name(), joinpoint.getSignature().getDeclaringType().getSimpleName());
         logger.info("request => {}", joinpoint.getSignature().getName());
     }
@@ -44,6 +41,5 @@ public class LogAspect {
     @AfterReturning(value = "controllerLog()", returning = "result")
     public void requestLogging(JoinPoint joinpoint, Object result) {
         logger.info("{} response::: {}", joinpoint.getSignature().getName(), result);
-        MDC.clear();
     }
 }

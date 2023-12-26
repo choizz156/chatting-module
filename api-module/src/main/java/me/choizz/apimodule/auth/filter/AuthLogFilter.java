@@ -26,7 +26,7 @@ public class AuthLogFilter extends OncePerRequestFilter {
         MDC.put(MdcKey.TRACE_ID.name(),
             StringUtils.defaultString(
                 requestId,
-                UUID.randomUUID().toString().replace("-", "")
+                UUID.randomUUID().toString()
             )
         );
         filterChain.doFilter(request, response);
