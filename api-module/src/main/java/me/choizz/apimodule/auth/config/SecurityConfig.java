@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import me.choizz.apimodule.auth.UserDetailsVerification;
+import me.choizz.apimodule.auth.filter.AuthLogFilter;
 import me.choizz.apimodule.auth.filter.EmailPasswordAuthFilter;
 import me.choizz.apimodule.auth.handler.AuthDeniedHandler;
 import me.choizz.apimodule.auth.handler.AuthEntryPointHandler;
@@ -55,9 +56,10 @@ public class SecurityConfig {
                 .changeSessionId()
                 .maximumSessions(1)
                 .maxSessionsPreventsLogin(false)
-               .expiredUrl("https://choizz-chatting.vercel.app/login")
+                .expiredUrl("https://choizz-chatting.vercel.app/login")
             )
             .addFilterBefore(emailPasswordAuthFilter(), UsernamePasswordAuthenticationFilter.class)
+            .addFilterBefore(new AuthLogFilter(), EmailPasswordAuthFilter.class)
             .exceptionHandling(e -> {
                 e.accessDeniedHandler(new AuthDeniedHandler(objectMapper));
                 e.authenticationEntryPoint(new AuthEntryPointHandler(objectMapper));

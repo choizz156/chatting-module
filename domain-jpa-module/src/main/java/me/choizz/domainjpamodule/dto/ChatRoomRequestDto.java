@@ -13,8 +13,4 @@ public class ChatRoomRequestDto {
 
     @NotBlank
     private Long clientId;
-
-    public void toDefaultName(final String nickname) {
-        this.name = nickname;
-    }
 }

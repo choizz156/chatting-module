@@ -17,12 +17,14 @@ import me.choizz.apimodule.auth.UserAttribute;
 import me.choizz.apimodule.auth.UserPrincipal;
 import me.choizz.chattingredismodule.dto.LoginUser;
 import me.choizz.chattingredismodule.session.LoginUsers;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 
 @RequiredArgsConstructor
 public class AuthSuccessHandler implements AuthenticationSuccessHandler {
-
+    private static final Logger logger = LoggerFactory.getLogger("fileLog");
     private final ObjectMapper objectMapper;
     private final LoginUsers loginUsers;
 
@@ -34,6 +36,7 @@ public class AuthSuccessHandler implements AuthenticationSuccessHandler {
     ) throws IOException, ServletException {
 
         LoginUser loginUser = addLoginUser(request, authentication);
+        logger.info("auth success => {}", loginUser.email());
 
         response.setContentType(APPLICATION_JSON_VALUE);
         response.setCharacterEncoding(UTF_8.name());

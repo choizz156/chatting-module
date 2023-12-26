@@ -6,12 +6,14 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import java.util.List;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.ToString;
 import me.choizz.domainjpamodule.exception.ApiExceptionCode;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 
 @Getter
+@ToString
 @JsonInclude(Include.NON_EMPTY)
 public class ErrorResponse {
 
