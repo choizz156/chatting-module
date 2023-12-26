@@ -19,16 +19,16 @@
   </springProfile>
 
 
-  <springProfile name="prod">
+  <springProfile name="prod || prod1 || prod2">
     <logger name="fileLog">
       <level value="INFO"/>
       <appender-ref ref="infoLog"/>
       <appender-ref ref="errorLog"/>
     </logger>
 
-    <logger name="jsonLog" level="INFO">
-      <appender-ref ref="jsonLog"/>
-    </logger>
+<!--    <logger name="jsonLog" level="INFO">-->
+<!--      <appender-ref ref="jsonLog"/>-->
+<!--    </logger>-->
   </springProfile>
 
 </configuration>

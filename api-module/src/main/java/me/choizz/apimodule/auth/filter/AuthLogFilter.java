@@ -7,7 +7,8 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.UUID;
 import lombok.extern.slf4j.Slf4j;
-import me.choizz.apimodule.aop.TraceId;
+import me.choizz.apimodule.aop.MdcKey;
+import net.logstash.logback.encoder.org.apache.commons.lang3.StringUtils;
 import org.slf4j.MDC;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -20,7 +21,14 @@ public class AuthLogFilter extends OncePerRequestFilter {
         final HttpServletResponse response,
         final FilterChain filterChain
     ) throws ServletException, IOException {
-        MDC.put(TraceId.get(), UUID.randomUUID().toString());
+        String requestId = request.getHeader("X-RequestID");
+        log.error("{}", requestId);
+        MDC.put(MdcKey.TRACE_ID.name(),
+            StringUtils.defaultString(
+                requestId,
+                UUID.randomUUID().toString().replace("-", "")
+            )
+        );
         filterChain.doFilter(request, response);
         MDC.clear();
     }

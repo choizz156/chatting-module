@@ -1,6 +1,7 @@
 package me.choizz.apimodule.aop;
 
 import java.util.UUID;
+import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Aspect;
@@ -11,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
 import org.springframework.stereotype.Component;
 
+@Slf4j
 @Aspect
 @Component
 public class LogAspect {
@@ -32,8 +34,10 @@ public class LogAspect {
     }
 
     @Before("controllerLog()")
-    public void requestLogging(JoinPoint joinpoint) throws Throwable {
-        MDC.put(TraceId.get(), UUID.randomUUID().toString());
+    public void requestLogging(JoinPoint joinpoint) {
+        log.error("requestLogging");
+        MDC.put(MdcKey.TRACE_ID.name(), UUID.randomUUID().toString());
+        MDC.put(MdcKey.TARGET.name(), joinpoint.getSignature().getDeclaringType().getSimpleName());
         logger.info("request => {}", joinpoint.getSignature().getName());
     }
 

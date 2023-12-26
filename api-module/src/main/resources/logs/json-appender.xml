@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <included>
-  <!--  <property name="home" value="/home/ubuntu/chatting-module/logs/"/>-->
-  <property name="home" value="/Users/choi/chattingmodule/api-module/logs/"/>
+    <property name="home" value="/home/ubuntu/chatting-module/logs/"/>
+<!--  <property name="home" value="/Users/choi/chattingmodule/api-module/logs/"/>-->
 
 
   <appender name="jsonLog" class="ch.qos.logback.core.rolling.RollingFileAppender">
