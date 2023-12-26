@@ -44,6 +44,7 @@ public class ChatMessageService {
 
     public void deleteMessage(final String id) {
         chatMessageRepository.deleteById(id);
+        logger.info("sent message delete => messageID : {}", id);
     }
 
     private List<ChatMessage> getChatMessages(final Long roomId) {

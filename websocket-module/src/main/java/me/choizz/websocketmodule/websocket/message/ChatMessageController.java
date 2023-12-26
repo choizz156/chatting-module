@@ -11,6 +11,8 @@ import me.choizz.chattingmongomodule.dto.ChatMessageDto;
 import me.choizz.websocketmodule.websocket.exception.ResponseDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.messaging.MessageDeliveryException;
+import org.springframework.messaging.MessagingException;
 import org.springframework.messaging.handler.annotation.MessageExceptionHandler;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
@@ -64,12 +66,9 @@ public class ChatMessageController {
     private void sendMessage(final ChatMessage message) {
         try {
             operations.convertAndSend("/queue/" + message.getReceiverId() + "/messages", message);
-        } catch (Exception e) {
-            String id = message.getId();
-            chatMessageService.deleteMessage(id);
-            logger.error("sent message delete => messageID : {}", id);
-            logger.error("stomp error => {}", e.getMessage());
-            throw e;
+        } catch (MessagingException e) {
+            chatMessageService.deleteMessage(message.getId());
+            throw new MessageDeliveryException(e.getMessage());
         }
     }
 }

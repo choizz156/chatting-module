@@ -34,6 +34,6 @@ public class ApiExceptionHandler {
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ApiResponseDto<ErrorResponse> exceptionHandler(Exception e) {
         logger.error("internal server error => {}", e.getMessage());
-        return new ApiResponseDto<>(ErrorResponse.of("알 수 없는 오류가 발생했습니다."));
+        return new ApiResponseDto<>(ErrorResponse.of(HttpStatus.INTERNAL_SERVER_ERROR,"알 수 없는 오류가 발생했습니다."));
     }
 }
