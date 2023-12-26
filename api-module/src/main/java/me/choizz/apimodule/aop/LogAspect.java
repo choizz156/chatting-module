@@ -33,7 +33,6 @@ public class LogAspect {
 
     @Before("controllerLog()")
     public void requestLogging(JoinPoint joinpoint) {
-        log.error("requestLogging");
         MDC.put(MdcKey.TARGET.name(), joinpoint.getSignature().getDeclaringType().getSimpleName());
         logger.info("request => {}", joinpoint.getSignature().getName());
     }
