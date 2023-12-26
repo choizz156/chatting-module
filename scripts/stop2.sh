@@ -15,10 +15,12 @@ echo -e "${txtpur} 연결된 포트: $IDLE_PROFILE"
 
 if [ ${IDLE_PROFILE} == prod1 ]
 then
-    IDLE_PID=8082
+    IDLE_PORT=8082
 else
-    IDLE_PID=8081
+    IDLE_PORT=8081
 fi
+
+IDLE_PID=$(lsof -i :${IDLE_PORT} -t)
 echo -e "${txtpur} 해제할 pid: $IDLE_PID"
 if [ -z ${IDLE_PID} ]; then
   echo -e "${txtgrn} >> 해당 포트에서 구동 중인 애플리케이션이 없습니다."

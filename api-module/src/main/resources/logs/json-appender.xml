@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <included>
-    <property name="home" value="/home/ubuntu/chatting-module/logs/"/>
-<!--  <property name="home" value="/Users/choi/chattingmodule/api-module/logs/"/>-->
+  <property name="home" value="/home/ubuntu/api-module/logs/"/>
+  <!--  <property name="home" value="/Users/choi/chattingmodule/api-module/logs/"/>-->
 
 
   <appender name="jsonLog" class="ch.qos.logback.core.rolling.RollingFileAppender">
@@ -21,7 +21,7 @@
       <timestampPattern>yyyy-MM-dd HH:mm:ss.SSS</timestampPattern>
       <fieldNames>
         <timestamp>timestamp</timestamp>
-<!--        <traceId>[trace.id=%X{trace.id}]</traceId>-->
+        <!--        <traceId>[trace.id=%X{trace.id}]</traceId>-->
         <thread>thread</thread>
         <message>message</message>
         <stackTrace>exception</stackTrace>
