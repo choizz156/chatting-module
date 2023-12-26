@@ -10,9 +10,15 @@ ABSPATH=$(readlink -f $0)
 ABSDIR=$(dirname $ABSPATH)
 source ${ABSDIR}/profile.sh
 
-IDLE_PORT=$(find_idle_port)
-echo -e "${txtpur} 연결 해제된 포트: $IDLE_PORT"
-IDLE_PID=$(lsof -i :${IDLE_PORT} -t)
+IDLE_PROFILE=$(curl -s https://choizz-chat.r-e.kr/profile)
+echo -e "${txtpur} 연결된 포트: $IDLE_PROFILE"
+
+if [ ${IDLE_PROFILE} == prod1 ]
+then
+    IDLE_PID=8082
+else
+    IDLE_PID=8081
+fi
 echo -e "${txtpur} 해제할 pid: $IDLE_PID"
 if [ -z ${IDLE_PID} ]; then
   echo -e "${txtgrn} >> 해당 포트에서 구동 중인 애플리케이션이 없습니다."
