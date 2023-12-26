@@ -14,7 +14,7 @@ source ${ABSDIR}/switch.sh
 IDLE_PORT=$(find_idle_port)
 
 echo -e "${txtpur} health check start"
-echo -e "${txtpur} IDLE_PORT: $IDLE_PORT" # 8081? 8082
+echo -e "${txtpur} 배포된 포트: $IDLE_PORT"
 
 
 sleep 10
@@ -27,6 +27,7 @@ do
   if [ ${UP_COUNT} -ge 1 ]
   then
     echo -e "${txtpur} health check 성공"
+
     switch_proxy
     break
   else

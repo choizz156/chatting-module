@@ -15,6 +15,23 @@ function switch_proxy(){
   echo -e "${txtpur} 전환할 port: $IDLE_PORT"
   echo -e "${txtpur} port 전환"
 
+  if [ ${IDLE_PORT} == 8081 ]
+  then
+      EXPIRE_PORT=8082
+  else
+      EXPIRE_PORT=8081
+  fi
+
+IDLE_PID=$(lsof -i :${EXPIRE_PORT} -t)
+echo -e "${txtpur} 해제할 pid: $IDLE_PID , port: $EXPIRE_PORT"
+if [ -z ${IDLE_PID} ]; then
+  echo -e "${txtgrn} >> 해당 포트에서 구동 중인 애플리케이션이 없습니다."
+else
+  echo -e "${txtgrn} >> kill -15 $IDLE_PID"
+  kill -15 ${IDLE_PID}
+  sleep 3
+  echo -e "${txtpur} 구동 종료"
+fi
 
  docker exec -i reverse_proxy /bin/bash <<EOF
   echo "set \\\$service_url http://172.17.0.1:${IDLE_PORT};" |
