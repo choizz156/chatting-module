@@ -20,7 +20,7 @@ public class ApiExceptionHandler {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ApiResponseDto<ErrorResponse> methodArgumentNotValidExceptionHandler(MethodArgumentNotValidException e) {
-        logger.info("MethodArgumentNotValidException => {}", e.getBindingResult());
+        logger.warn("MethodArgumentNotValidException => {}", e.getBindingResult());
         return new ApiResponseDto<>(ErrorResponse.of(HttpStatus.BAD_REQUEST, e.getBindingResult()));
     }
 
@@ -33,7 +33,7 @@ public class ApiExceptionHandler {
     @ExceptionHandler(Exception.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ApiResponseDto<ErrorResponse> exceptionHandler(Exception e) {
-        logger.error("internal server error => {}", e.getMessage());
+        logger.warn("internal server error => {}", e.getMessage());
         return new ApiResponseDto<>(ErrorResponse.of(HttpStatus.INTERNAL_SERVER_ERROR,"알 수 없는 오류가 발생했습니다."));
     }
 }

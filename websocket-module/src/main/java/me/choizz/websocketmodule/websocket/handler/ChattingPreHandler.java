@@ -26,11 +26,8 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 @Slf4j
 public class ChattingPreHandler implements ChannelInterceptor {
 
-    private static final String DELIVERY_EXCEPTION = "통신 오류";
-
     private final ObjectMapper objectMapper;
     private final Logger logger = LoggerFactory.getLogger("fileLog");
-
 
     @Override
     public Message<?> preSend(final Message<?> message, final MessageChannel channel) {

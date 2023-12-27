@@ -36,7 +36,7 @@ class AuthErrorResponseSender {
         response.setStatus(status.value());
 
         ErrorResponse errorInfo = ErrorResponse.of(status, exception.getMessage());
-        logger.info("auth error => {}", errorInfo);
+        logger.warn("auth error => {}", errorInfo);
         String errorResponse =
             objectMapper.writeValueAsString(new ApiResponseDto<>(errorInfo));
 

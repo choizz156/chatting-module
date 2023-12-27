@@ -55,7 +55,7 @@ public class ChatMessageController {
 
     @MessageExceptionHandler
     public void exceptionHandler(Exception e, ChatRequestMessageDto chatRequestMessageDto) {
-        logger.error("messaging error => {}", e.getMessage());
+        logger.warn("error => {}", e.getMessage());
         operations.convertAndSend(
             "/topic/" + chatRequestMessageDto.senderId() + "/error",
             "통신 장애가 발생했습니다."
