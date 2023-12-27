@@ -16,6 +16,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class LogAspect {
 
+    private static final String TARGET = "TARGET";
     private final Logger logger = LoggerFactory.getLogger("fileLog");
 
     @Pointcut("execution(* me.choizz.apimodule.api.controller..*Controller.*(..))")
@@ -33,7 +34,7 @@ public class LogAspect {
 
     @Before("controllerLog()")
     public void requestLogging(JoinPoint joinpoint) {
-        MDC.put(MdcKey.TARGET.name(), joinpoint.getSignature().getDeclaringType().getSimpleName());
+        MDC.put(TARGET, joinpoint.getSignature().getDeclaringType().getSimpleName());
         logger.info("request => {}", joinpoint.getSignature().getName());
     }
 

@@ -15,6 +15,13 @@ function switch_proxy(){
   echo -e "${txtpur} 전환할 port: $IDLE_PORT"
   echo -e "${txtpur} port 전환"
 
+ docker exec -i reverse_proxy /bin/bash <<EOF
+  echo "set \\\$service_url http://172.17.0.1:${IDLE_PORT};" |
+  tee /etc/nginx/conf.d/service-url.inc
+  nginx -s reload
+EOF
+  echo -e "${txtpur} nginx reload"
+
   if [ ${IDLE_PORT} == 8081 ]
   then
       EXPIRE_PORT=8082
@@ -32,12 +39,5 @@ else
   sleep 3
   echo -e "${txtpur} 구동 종료"
 fi
-
- docker exec -i reverse_proxy /bin/bash <<EOF
-  echo "set \\\$service_url http://172.17.0.1:${IDLE_PORT};" |
-  tee /etc/nginx/conf.d/service-url.inc
-  nginx -s reload
-EOF
-  echo -e "${txtpur} nginx reload"
 }
 
