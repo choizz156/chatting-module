@@ -1,7 +1,5 @@
 package me.choizz.websocketmodule.websocket.message;
 
-import static net.logstash.logback.argument.StructuredArguments.kv;
-
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -13,6 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.messaging.MessageDeliveryException;
 import org.springframework.messaging.MessagingException;
+import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.messaging.handler.annotation.MessageExceptionHandler;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
@@ -39,14 +38,7 @@ public class ChatMessageController {
     }
 
     @MessageMapping("/chat")
-    public void sendChat(ChatRequestMessageDto chatRequestMessageDto) {
-
-        logger.info("addMessage in chatRoom -> id = {}", chatRequestMessageDto.roomId());
-        logger.info("{}, {}",
-            kv("senderID", chatRequestMessageDto.senderId()),
-            kv("receiverID", chatRequestMessageDto.receiverId())
-        );
-
+    public void sendChat(@Header(value = "simpSessionId") String sessionId, ChatRequestMessageDto chatRequestMessageDto) {
         ChatMessage messageEntity =
             chatMessageService.saveMassage(
                 chatRequestMessageDto.roomId(),

@@ -1,5 +1,6 @@
 package me.choizz.websocketmodule.websocket.config;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.simp.config.ChannelRegistration;
@@ -12,6 +13,8 @@ import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerCo
 @Configuration
 @EnableWebSocketMessageBroker
 public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
+
+    private final ObjectMapper objectMapper;
 
     @Override
     public void registerStompEndpoints(final StompEndpointRegistry registry) {
@@ -27,6 +30,6 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
     @Override
     public void configureClientInboundChannel(final ChannelRegistration registration) {
-       registration.interceptors(new ChattingPreHandler());
+       registration.interceptors(new ChattingPreHandler(objectMapper));
     }
 }

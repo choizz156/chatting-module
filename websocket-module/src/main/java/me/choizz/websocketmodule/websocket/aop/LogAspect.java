@@ -1,6 +1,5 @@
 package me.choizz.websocketmodule.websocket.aop;
 
-import java.util.UUID;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.AfterReturning;
@@ -35,7 +34,7 @@ public class LogAspect {
 
     @Before("messageLog()")
     public void messageLog(JoinPoint joinpoint) {
-        MDC.put(TRACE_ID, UUID.randomUUID().toString().replace("-", ""));
+        MDC.put(TRACE_ID, (String) joinpoint.getArgs()[0]);
         MDC.put(TARGET, joinpoint.getSignature().getDeclaringType().getSimpleName());
         logger.info("request => {}", joinpoint.getSignature().getName());
     }
@@ -59,7 +58,7 @@ public class LogAspect {
 
     @AfterReturning(value = "exceptionLog()", returning = "result")
     public void exceptionLog(JoinPoint joinpoint, Object result) {
-        logger.error("websocket exception => {}, result = {}",
+        logger.info("websocket exception => {}, result = {}",
             joinpoint.getSignature(),
             result
         );
