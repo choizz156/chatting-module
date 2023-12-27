@@ -39,8 +39,8 @@ dependencies {
     //aop
     implementation 'org.springframework.boot:spring-boot-starter-aop'
 
-    implementation project(':chatting-mongo-module');
-    implementation project(':chatting-redis-module');
+    implementation project(':chatting-mongo-module')
+    implementation project(':chatting-redis-module')
 }
 
 tasks.named('test') {

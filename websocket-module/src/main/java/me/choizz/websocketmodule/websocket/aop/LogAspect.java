@@ -25,35 +25,35 @@ public class LogAspect {
     }
 
     @Pointcut("execution(* me.choizz.websocketmodule.websocket.message..sendChat(..))")
-    public void messageLog() {
+    public void message() {
     }
 
     @Pointcut("execution(* me.choizz.websocketmodule.websocket..*Handler(..))")
     public void exceptionLog() {
     }
 
-    @Before("messageLog()")
-    public void messageLog(JoinPoint joinpoint) {
+    @Before("message()")
+    public void message(JoinPoint joinpoint) {
         MDC.put(TRACE_ID, (String) joinpoint.getArgs()[0]);
         MDC.put(TARGET, joinpoint.getSignature().getDeclaringType().getSimpleName());
         logger.info("request => {}", joinpoint.getSignature().getName());
     }
 
-    @AfterReturning(value = "messageLog()", returning = "result")
-    public void messageLog(JoinPoint joinpoint, Object result) {
-        logger.info("response::: {} ", joinpoint.getSignature().getName());
+    @AfterReturning(value = "message()", returning = "result")
+    public void message(JoinPoint joinpoint, Object result) {
+        logger.info("response::: {} result = {}", joinpoint.getSignature().getName(), result.getClass());
         MDC.clear();
     }
 
-    @Before("controllerLog() && !messageLog()")
+    @Before("controllerLog() && !message()")
     public void requestLogging(JoinPoint joinpoint) {
         MDC.put(TARGET, joinpoint.getSignature().getDeclaringType().getSimpleName());
         logger.info("request => {}", joinpoint.getSignature().getName());
     }
 
-    @AfterReturning(value = "controllerLog() && !messageLog()", returning = "result")
+    @AfterReturning(value = "controllerLog() && !message()", returning = "result")
     public void requestLogging(JoinPoint joinpoint, Object result) {
-        logger.info("response::: {} ", joinpoint.getSignature().getName());
+        logger.info("response::: {} result = {}", joinpoint.getSignature().getName(), result.getClass());
     }
 
     @AfterReturning(value = "exceptionLog()", returning = "result")

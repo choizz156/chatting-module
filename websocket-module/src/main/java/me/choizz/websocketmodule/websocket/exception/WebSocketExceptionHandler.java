@@ -20,14 +20,14 @@ public class WebSocketExceptionHandler {
     @ExceptionHandler(MongoClientException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public void mongoTimeoutExceptionHandler(MongoTimeoutException e) {
-        log.error("MongoClientException = {}", e.getMessage());
+        logger.error("MongoClientException = {}", e.getMessage());
         ErrorResponse.of(e.getMessage());
     }
 
     @ExceptionHandler(MongoException.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public void MongoExceptionHandler(MongoException e) {
-        log.error("mongodb error => {}" , e.getMessage());
+    public void mongoExceptionHandler(MongoException e) {
+        logger.error("mongodb error => {}" , e.getMessage());
         ErrorResponse.of("알 수 없는 에러가 발생했습니다.");
     }
 }
