@@ -23,7 +23,6 @@ public class AuthLogFilter extends OncePerRequestFilter {
         final FilterChain filterChain
     ) throws ServletException, IOException {
         String requestId = request.getHeader("X-RequestID");
-        log.error("{}", requestId);
         MDC.put(TRACE_ID,
             StringUtils.defaultString(
                 requestId,

@@ -41,7 +41,7 @@ public class LogAspect {
 
     @AfterReturning(value = "message()", returning = "result")
     public void message(JoinPoint joinpoint, Object result) {
-        logger.info("response::: {} result = {}", joinpoint.getSignature().getName(), result.getClass());
+        logger.info("response::: {} result = {}", joinpoint.getSignature().getName(), result);
         MDC.clear();
     }
 
@@ -53,7 +53,7 @@ public class LogAspect {
 
     @AfterReturning(value = "controllerLog() && !message()", returning = "result")
     public void requestLogging(JoinPoint joinpoint, Object result) {
-        logger.info("response::: {} result = {}", joinpoint.getSignature().getName(), result.getClass());
+        logger.info("response::: {} result = {}", joinpoint.getSignature().getName(), result);
     }
 
     @AfterReturning(value = "exceptionLog()", returning = "result")

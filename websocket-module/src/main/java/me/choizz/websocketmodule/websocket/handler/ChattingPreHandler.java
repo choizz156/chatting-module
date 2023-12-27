@@ -4,10 +4,10 @@ import static net.logstash.logback.argument.StructuredArguments.kv;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.base.Preconditions;
 import java.nio.charset.StandardCharsets;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.bson.json.JsonParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
@@ -31,41 +31,23 @@ public class ChattingPreHandler implements ChannelInterceptor {
     private final ObjectMapper objectMapper;
     private final Logger logger = LoggerFactory.getLogger("fileLog");
 
+
     @Override
     public Message<?> preSend(final Message<?> message, final MessageChannel channel) {
 
-        StompHeaderAccessor headerAccessor =
-            MessageHeaderAccessor.getAccessor(message, StompHeaderAccessor.class);
+        StompHeaderAccessor headerAccessor = getStompHeaderAccessor(
+            MessageHeaderAccessor.getAccessor(message, StompHeaderAccessor.class)
+        );
+        StompCommand command = getStompCommand(headerAccessor);
+        UsernamePasswordAuthenticationToken simpUser = getUser(headerAccessor);
 
-        if (headerAccessor == null) {
-            throw new MessageDeliveryException(DELIVERY_EXCEPTION);
-        }
-
-        StompCommand command = headerAccessor.getCommand();
-        if (command == null) {
-            throw new MessageDeliveryException(DELIVERY_EXCEPTION);
-        }
-
-        UsernamePasswordAuthenticationToken simpUser =
-            (UsernamePasswordAuthenticationToken) headerAccessor.getHeader("simpUser");
-        if (simpUser == null){
-            throw new AuthenticationServiceException("인증이 필요합니다.");
-        }
-
-        if (
-            command.equals(StompCommand.CONNECT) ||
-                command.equals(StompCommand.SEND) ||
-                command.equals(StompCommand.MESSAGE) ||
-                command.equals(StompCommand.DISCONNECT)
-        ) {
-            if (!simpUser.isAuthenticated()) {
-                throw new MessageDeliveryException("인증되지 않은 사용자입니다.");
-            }
+        if (isNeedAuthenticationCommand(command)) {
             String simpSessionId = (String) headerAccessor.getHeader("simpSessionId");
             MDC.put("TRACE_ID", simpSessionId);
             logger.info("stomp 연결, user = {}", simpUser.getPrincipal());
             return message;
         }
+
         return message;
     }
 
@@ -75,33 +57,12 @@ public class ChattingPreHandler implements ChannelInterceptor {
         final MessageChannel channel,
         final boolean sent
     ) {
-        StompHeaderAccessor headerAccessor =
-            MessageHeaderAccessor.getAccessor(message, StompHeaderAccessor.class);
-
-        String info = new String((byte[]) message.getPayload(), StandardCharsets.UTF_8);
-        if (headerAccessor == null) {
-            throw new MessageDeliveryException(DELIVERY_EXCEPTION);
-        }
-        StompCommand command = headerAccessor.getCommand();
-        if (command == null) {
-            throw new MessageDeliveryException(DELIVERY_EXCEPTION);
-        }
+        StompHeaderAccessor headerAccessor = getStompHeaderAccessor(
+            MessageHeaderAccessor.getAccessor(message, StompHeaderAccessor.class)
+        );
+        StompCommand command = getStompCommand(headerAccessor);
         if (command.equals(StompCommand.SEND)) {
-            logging(sent, info);
-        }
-    }
-
-    private void logging(final boolean sent, final String meessage) {
-        try {
-            UserInfo userInfo = objectMapper.readValue(meessage, UserInfo.class);
-            logger.info("{}, {}, {}, {}",
-                kv("is sent", sent),
-                kv("senderId", userInfo.senderId),
-                kv("receiverId", userInfo.receiverId),
-                kv("roomId", userInfo.roomId)
-            );
-        } catch (JsonProcessingException e) {
-            throw new JsonParseException(e);
+            logging(sent, new String((byte[]) message.getPayload(), StandardCharsets.UTF_8));
         }
     }
 
@@ -113,6 +74,57 @@ public class ChattingPreHandler implements ChannelInterceptor {
         final Exception ex
     ) {
         MDC.clear();
+    }
+
+    private boolean isNeedAuthenticationCommand(final StompCommand command) {
+        return command.equals(StompCommand.CONNECT) ||
+            command.equals(StompCommand.SEND) ||
+            command.equals(StompCommand.MESSAGE) ||
+            command.equals(StompCommand.DISCONNECT);
+    }
+
+    private StompHeaderAccessor getStompHeaderAccessor(final StompHeaderAccessor headerAccessor) {
+        return Preconditions.checkNotNull(headerAccessor, "stomp 통신 오류 발생");
+    }
+
+    private UsernamePasswordAuthenticationToken getUser
+        (
+            final StompHeaderAccessor headerAccessor
+        ) {
+        UsernamePasswordAuthenticationToken simpUser = null;
+        try {
+            simpUser = (UsernamePasswordAuthenticationToken) headerAccessor.getHeader("simpUser");
+            Preconditions.checkNotNull(simpUser, "인증 되지 않은 사용자입니다.");
+            Preconditions.checkArgument(simpUser.isAuthenticated(), "인증 되지 않은 사용자입니다.");
+        } catch (IllegalArgumentException e) {
+            throw new AuthenticationServiceException(e.getMessage());
+        }
+        return simpUser;
+    }
+
+    private StompCommand getStompCommand(final StompHeaderAccessor headerAccessor) {
+        try {
+            return Preconditions.checkNotNull(
+                headerAccessor.getCommand(),
+                "stomp command는 null일 수 없습니다."
+            );
+        } catch (IllegalArgumentException e) {
+            throw new MessageDeliveryException(e.getMessage());
+        }
+    }
+
+    private void logging(final boolean sent, final String messageInfo) {
+        try {
+            UserInfo userInfo = objectMapper.readValue(messageInfo, UserInfo.class);
+            logger.info("{}, {}, {}, {}",
+                kv("is sent", sent),
+                kv("senderId", userInfo.senderId),
+                kv("receiverId", userInfo.receiverId),
+                kv("roomId", userInfo.roomId)
+            );
+        } catch (JsonProcessingException e) {
+            throw new MessageDeliveryException(e.getMessage());
+        }
     }
 
     private record UserInfo(String senderId, String receiverId, Long roomId) {

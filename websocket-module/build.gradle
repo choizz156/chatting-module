@@ -39,6 +39,9 @@ dependencies {
     //aop
     implementation 'org.springframework.boot:spring-boot-starter-aop'
 
+    //guava
+    implementation 'com.google.guava:guava:33.0.0-jre'
+
     implementation project(':chatting-mongo-module')
     implementation project(':chatting-redis-module')
 }

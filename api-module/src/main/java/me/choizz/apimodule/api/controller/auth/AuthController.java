@@ -29,8 +29,8 @@ public class AuthController {
     @DeleteMapping("/logout")
     public String logout(HttpServletRequest request) {
         HttpSession session = request.getSession(false);
-        logger.info("logout sessionId =>> {}", session.getId());
         session.invalidate();
+        logger.info("LOGOUT sessionId =>> {}", session.getId());
         return "로그아웃";
     }
 }
