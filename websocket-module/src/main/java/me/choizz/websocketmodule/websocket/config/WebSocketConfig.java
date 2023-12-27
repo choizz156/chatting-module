@@ -2,6 +2,8 @@ package me.choizz.websocketmodule.websocket.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
+import me.choizz.websocketmodule.websocket.handler.ChatErrorHandler;
+import me.choizz.websocketmodule.websocket.handler.ChattingPreHandler;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.simp.config.ChannelRegistration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;

@@ -1,4 +1,4 @@
-package me.choizz.websocketmodule.websocket.config;
+package me.choizz.websocketmodule.websocket.handler;
 
 import java.nio.charset.StandardCharsets;
 import org.springframework.messaging.Message;

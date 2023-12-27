@@ -1,4 +1,4 @@
-package me.choizz.websocketmodule.websocket.config;
+package me.choizz.websocketmodule.websocket.handler;
 
 import static net.logstash.logback.argument.StructuredArguments.kv;
 
@@ -18,12 +18,15 @@ import org.springframework.messaging.simp.stomp.StompCommand;
 import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.messaging.support.ChannelInterceptor;
 import org.springframework.messaging.support.MessageHeaderAccessor;
+import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 
 
 @RequiredArgsConstructor
 @Slf4j
 public class ChattingPreHandler implements ChannelInterceptor {
+
+    private static final String DELIVERY_EXCEPTION = "통신 오류";
 
     private final ObjectMapper objectMapper;
     private final Logger logger = LoggerFactory.getLogger("fileLog");
@@ -33,9 +36,21 @@ public class ChattingPreHandler implements ChannelInterceptor {
 
         StompHeaderAccessor headerAccessor =
             MessageHeaderAccessor.getAccessor(message, StompHeaderAccessor.class);
+
+        if (headerAccessor == null) {
+            throw new MessageDeliveryException(DELIVERY_EXCEPTION);
+        }
+
+        StompCommand command = headerAccessor.getCommand();
+        if (command == null) {
+            throw new MessageDeliveryException(DELIVERY_EXCEPTION);
+        }
+
         UsernamePasswordAuthenticationToken simpUser =
             (UsernamePasswordAuthenticationToken) headerAccessor.getHeader("simpUser");
-        StompCommand command = headerAccessor.getCommand();
+        if (simpUser == null){
+            throw new AuthenticationServiceException("인증이 필요합니다.");
+        }
 
         if (
             command.equals(StompCommand.CONNECT) ||
@@ -48,7 +63,7 @@ public class ChattingPreHandler implements ChannelInterceptor {
             }
             String simpSessionId = (String) headerAccessor.getHeader("simpSessionId");
             MDC.put("TRACE_ID", simpSessionId);
-            logger.info("stomp 연결, user = {}", simpUser.getPrincipal().toString());
+            logger.info("stomp 연결, user = {}", simpUser.getPrincipal());
             return message;
         }
         return message;
@@ -64,8 +79,14 @@ public class ChattingPreHandler implements ChannelInterceptor {
             MessageHeaderAccessor.getAccessor(message, StompHeaderAccessor.class);
 
         String info = new String((byte[]) message.getPayload(), StandardCharsets.UTF_8);
+        if (headerAccessor == null) {
+            throw new MessageDeliveryException(DELIVERY_EXCEPTION);
+        }
         StompCommand command = headerAccessor.getCommand();
-        if(command.equals(StompCommand.SEND)){
+        if (command == null) {
+            throw new MessageDeliveryException(DELIVERY_EXCEPTION);
+        }
+        if (command.equals(StompCommand.SEND)) {
             logging(sent, info);
         }
     }
@@ -77,7 +98,7 @@ public class ChattingPreHandler implements ChannelInterceptor {
                 kv("is sent", sent),
                 kv("senderId", userInfo.senderId),
                 kv("receiverId", userInfo.receiverId),
-                kv("roomId",userInfo.roomId)
+                kv("roomId", userInfo.roomId)
             );
         } catch (JsonProcessingException e) {
             throw new JsonParseException(e);
@@ -95,5 +116,6 @@ public class ChattingPreHandler implements ChannelInterceptor {
     }
 
     private record UserInfo(String senderId, String receiverId, Long roomId) {
+
     }
 }
