@@ -1,9 +1,8 @@
-package me.choizz.chattingmongomodule.dto;
+package me.choizz.websocketmodule.websocket.dto;
 
 import me.choizz.chattingmongomodule.chatmessage.ChatMessage;
 
-public record ChatMessageDto(
-    String id,
+public record ChatRequestMessageDto(
     Long roomId,
     Long senderId,
     Long receiverId,
@@ -13,6 +12,7 @@ public record ChatMessageDto(
 ) {
     public ChatMessage toEntity() {
         return ChatMessage.builder()
+            .roomId(roomId())
             .senderId(senderId())
             .receiverId(receiverId())
             .senderNickname(senderNickname())

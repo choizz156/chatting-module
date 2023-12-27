@@ -7,7 +7,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import me.choizz.chattingmongomodule.chatmessage.ChatMessage;
 import me.choizz.chattingmongomodule.chatmessage.ChatMessageService;
-import me.choizz.chattingmongomodule.dto.ChatMessageDto;
+import me.choizz.websocketmodule.websocket.dto.ChatRequestMessageDto;
 import me.choizz.websocketmodule.websocket.exception.ResponseDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,26 +39,30 @@ public class ChatMessageController {
     }
 
     @MessageMapping("/chat")
-    public void sendChat(ChatMessageDto chatMessageDto) {
-        logger.info("addMessage in chatRoom -> id = {}", chatMessageDto.roomId());
+    public void sendChat(ChatRequestMessageDto chatRequestMessageDto) {
+
+        logger.info("addMessage in chatRoom -> id = {}", chatRequestMessageDto.roomId());
         logger.info("{}, {}",
-            kv("senderID", chatMessageDto.senderId()),
-            kv("receiverID", chatMessageDto.receiverId())
+            kv("senderID", chatRequestMessageDto.senderId()),
+            kv("receiverID", chatRequestMessageDto.receiverId())
         );
 
         ChatMessage messageEntity =
-            chatMessageService.saveMassage(chatMessageDto.roomId(), chatMessageDto.toEntity());
+            chatMessageService.saveMassage(
+                chatRequestMessageDto.roomId(),
+                chatRequestMessageDto.toEntity()
+            );
 
         sendMessage(messageEntity);
 
-        logger.info("send message complete :: roomId => {}", chatMessageDto.roomId());
+        logger.info("send message complete :: roomId => {}", chatRequestMessageDto.roomId());
     }
 
     @MessageExceptionHandler
-    public void exceptionHandler(Exception e, ChatMessageDto chatMessageDto) {
+    public void exceptionHandler(Exception e, ChatRequestMessageDto chatRequestMessageDto) {
         logger.error("messaging error => {}", e.getMessage());
         operations.convertAndSend(
-            "/topic/" + chatMessageDto.senderId() + "/error",
+            "/topic/" + chatRequestMessageDto.senderId() + "/error",
             "통신 장애가 발생했습니다."
         );
     }

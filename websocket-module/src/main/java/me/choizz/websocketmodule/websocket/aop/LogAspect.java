@@ -17,25 +17,29 @@ import org.springframework.stereotype.Component;
 @Component("webSocketLogAspect")
 public class LogAspect {
 
-    private final Logger logger = LoggerFactory.getLogger("fileLog");
+    private static final String TRACE_ID = "TRACE_ID";
     private static final String TARGET = "TARGET";
+    private final Logger logger = LoggerFactory.getLogger("fileLog");
 
     @Pointcut("execution(* me.choizz.websocketmodule.websocket.message..*(..))")
     public void controllerLog() {
     }
+
     @Pointcut("execution(* me.choizz.websocketmodule.websocket.message..sendChat(..))")
     public void messageLog() {
     }
+
     @Pointcut("execution(* me.choizz.websocketmodule.websocket..*Handler(..))")
     public void exceptionLog() {
     }
 
     @Before("messageLog()")
     public void messageLog(JoinPoint joinpoint) {
-        MDC.put("TRACE_ID", UUID.randomUUID().toString());
+        MDC.put(TRACE_ID, UUID.randomUUID().toString().replace("-", ""));
         MDC.put(TARGET, joinpoint.getSignature().getDeclaringType().getSimpleName());
         logger.info("request => {}", joinpoint.getSignature().getName());
     }
+
     @AfterReturning(value = "messageLog()", returning = "result")
     public void messageLog(JoinPoint joinpoint, Object result) {
         logger.info("response::: {} ", joinpoint.getSignature().getName());

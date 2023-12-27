@@ -15,6 +15,7 @@ public class ChatMessage extends BaseMongoEntity {
 
     @Id
     private String id;
+    private Long roomId;
     private Long senderId;
     private Long receiverId;
     private String senderNickname;
@@ -23,12 +24,14 @@ public class ChatMessage extends BaseMongoEntity {
 
     @Builder
     public ChatMessage(
+        final Long roomId,
         final Long senderId,
         final Long receiverId,
         final String senderNickname,
         final String receiverNickname,
         final String content
     ) {
+        this.roomId = roomId;
         this.senderId = senderId;
         this.receiverId = receiverId;
         this.senderNickname = senderNickname;
