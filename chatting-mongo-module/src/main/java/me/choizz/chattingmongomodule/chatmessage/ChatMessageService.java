@@ -38,6 +38,14 @@ public class ChatMessageService {
         return message;
     }
 
+    public ChatMessage saveMassage1(final Long roomId, final ChatMessage chatMessage) {
+        ChatMessage message = chatMessageRepository.save(chatMessage);
+        logger.info("save message in messageRepository");
+        insertMessage(roomId, message);
+
+        return message;
+    }
+
     public List<ChatMessage> findChatMessages(Long roomId) {
         return getChatMessages(roomId);
     }
@@ -69,13 +77,26 @@ public class ChatMessageService {
     }
 
 
-    private void checkExistChatRoom(final Long roomId, final ChatMessage chatMessage) {
-        if (!chatRoomRepository.existsById(roomId)) {
+    public void checkExistChatRoom(final Long roomId, final ChatMessage chatMessage) {
+        if (isNotExistRoom(roomId)) {
             logger.info("checkExistChatRoom => chatRoomId: {}", roomId);
 
             ChatRoom chatRoom = ChatRoom.of(roomId, chatMessage);
             chatRoomRepository.save(chatRoom);
             logger.info("create new Room => new chatRoomId: {}", roomId);
         }
+    }
+
+    public void checkExistChatRoom1(final Long roomId) {
+        if (isNotExistRoom(roomId)) {
+            logger.info("checkExistChatRoom => chatRoomId: {}", roomId);
+            ChatRoom chatRoom = ChatRoom.of(roomId);
+            chatRoomRepository.save(chatRoom);
+            logger.info("create new Room => new chatRoomId: {}", roomId);
+        }
+    }
+
+    private boolean isNotExistRoom(final Long roomId) {
+        return !chatRoomRepository.existsById(roomId);
     }
 }

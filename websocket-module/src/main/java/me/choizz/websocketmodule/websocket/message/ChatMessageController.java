@@ -38,18 +38,23 @@ public class ChatMessageController {
     }
 
     @MessageMapping("/chat")
-    public void sendChat(@Header(value = "simpSessionId") String sessionId,
-        ChatRequestMessageDto chatRequestMessageDto) {
-        ChatMessage messageEntity =
-            chatMessageService.saveMassage(
-                chatRequestMessageDto.roomId(),
-                chatRequestMessageDto.toEntity()
-            );
+    public void sendChat(
+        @Header(value = "simpSessionId") String sessionId,
+        ChatRequestMessageDto messageDto
+    ) {
+        chatMessageService.checkExistChatRoom1(messageDto.roomId());
+        ChatMessage messageEntity = chatMessageService.saveMassage1(messageDto.roomId(),
+            messageDto.toEntity());
+//        ChatMessage messageEntity =
+//            chatMessageService.saveMassage(
+//                messageDto.roomId(),
+//                messageDto.toEntity()
+//            );
 
         sendMessage(messageEntity);
         logger.info(
             "send message complete :: roomId => {}, sessionId = {}",
-            chatRequestMessageDto.roomId(), sessionId
+            messageDto.roomId(), sessionId
         );
     }
 
