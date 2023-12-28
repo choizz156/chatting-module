@@ -22,7 +22,7 @@
     <encoder>
       <charset>utf8</charset>
       <Pattern>
-        %d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] [TRACE_ID=%X{TRACE_ID}] [%X{TARGET:-auth}]  %-5level %logger - %m%n
+        %d{yyyy-MM-dd HH:mm:ss.SSS, ${logback.timezone:-Asia/Seoul}} [%thread] [TRACE_ID=%X{TRACE_ID}] [%X{TARGET:-auth}]  %-5level %logger - %m%n
       </Pattern>
     </encoder>
   </appender>
