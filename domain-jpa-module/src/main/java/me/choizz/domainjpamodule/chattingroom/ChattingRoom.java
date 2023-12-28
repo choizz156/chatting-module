@@ -34,13 +34,13 @@ public class ChattingRoom extends BaseJpaEntity {
     @JoinColumn(name = "client_id")
     private User client;
 
+    public ChattingRoom(final String roomName) {
+        this.roomName = roomName;
+    }
+
     public void makeChattingRoom(User host, User client){
         this.host = host;
         this.client = client;
-    }
-
-    public ChattingRoom(final String roomName) {
-        this.roomName = roomName;
     }
 
     public String getHostNickName(){

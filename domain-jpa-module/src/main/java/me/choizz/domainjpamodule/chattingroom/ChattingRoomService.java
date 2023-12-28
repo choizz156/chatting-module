@@ -26,7 +26,9 @@ public class ChattingRoomService {
     ) {
 
         Optional<ChattingRoom> chattingRoom = checkDuplicationOfChattingRoom(hostId, clientId);
-        if(chattingRoom.isPresent()) return chattingRoom.get();
+        if (chattingRoom.isPresent()) {
+            return chattingRoom.get();
+        }
 
         ChattingUser users = getChattingUser(hostId, clientId);
         ChattingRoom room = new ChattingRoom(roomName);
@@ -34,7 +36,7 @@ public class ChattingRoomService {
         return roomRepository.save(room);
     }
 
-    private Optional<ChattingRoom>  checkDuplicationOfChattingRoom(final Long hostId, final Long clientId) {
+    private Optional<ChattingRoom> checkDuplicationOfChattingRoom(final Long hostId, final Long clientId) {
         return roomRepository.findChattingRoomByHostIdAndClientId(hostId, clientId);
     }
 

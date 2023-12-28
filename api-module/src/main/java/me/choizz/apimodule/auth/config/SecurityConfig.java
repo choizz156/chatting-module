@@ -24,7 +24,6 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.security.core.session.SessionRegistryImpl;
-import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -44,6 +43,7 @@ public class SecurityConfig {
     private final ObjectMapper objectMapper;
     private final UserDetailsVerification userDetailsVerification;
     private final LoginUsers loginUsers;
+    private final PasswordEncoder passwordEncoder;
 
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
@@ -117,13 +117,8 @@ public class SecurityConfig {
     public AuthenticationManager authenticationManager() {
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
         provider.setUserDetailsService(userDetailsVerification);
-        provider.setPasswordEncoder(passwordEncoder());
+        provider.setPasswordEncoder(passwordEncoder);
         return new ProviderManager(provider);
-    }
-
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return PasswordEncoderFactories.createDelegatingPasswordEncoder();
     }
 
     @Bean

@@ -3,6 +3,7 @@ package me.choizz.chattingredismodule;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.time.Duration;
+import me.choizz.chattingredismodule.config.TestRedisConfig;
 import me.choizz.chattingredismodule.dto.LoginUser;
 import me.choizz.chattingredismodule.listener.RedisExpirationListener;
 import me.choizz.chattingredismodule.session.LoginUsers;
@@ -16,7 +17,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.test.context.ActiveProfiles;
 
 
-@SpringBootTest
+@SpringBootTest(classes = {RedisExpirationListener.class, LoginUsers.class, TestRedisConfig.class})
 @ActiveProfiles("test")
 class RedisExpirationListenerTest {
 
