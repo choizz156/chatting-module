@@ -42,14 +42,9 @@ public class ChatMessageController {
         @Header(value = "simpSessionId") String sessionId,
         ChatRequestMessageDto messageDto
     ) {
-        chatMessageService.checkExistChatRoom1(messageDto.roomId());
-        ChatMessage messageEntity = chatMessageService.saveMassage1(messageDto.roomId(),
+        chatMessageService.checkExistChatRoom(messageDto.roomId());
+        ChatMessage messageEntity = chatMessageService.saveMassage(messageDto.roomId(),
             messageDto.toEntity());
-//        ChatMessage messageEntity =
-//            chatMessageService.saveMassage(
-//                messageDto.roomId(),
-//                messageDto.toEntity()
-//            );
 
         sendMessage(messageEntity);
         logger.info(

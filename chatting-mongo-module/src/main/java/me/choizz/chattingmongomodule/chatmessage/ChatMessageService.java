@@ -1,6 +1,5 @@
 package me.choizz.chattingmongomodule.chatmessage;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -8,6 +7,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import me.choizz.chattingmongomodule.chatRoom.ChatRoom;
 import me.choizz.chattingmongomodule.chatRoom.ChatRoomRepository;
+import me.choizz.chattingmongomodule.exception.WebSocketBusinessException;
+import me.choizz.chattingmongomodule.exception.WebSocketExceptionCode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -27,22 +28,12 @@ public class ChatMessageService {
     private final ChatRoomRepository chatRoomRepository;
     private final ChatMessageRepository chatMessageRepository;
 
+
     public ChatMessage saveMassage(final Long roomId, final ChatMessage chatMessage) {
-        checkExistChatRoom(roomId, chatMessage);
-
         ChatMessage message = chatMessageRepository.save(chatMessage);
         logger.info("save message in messageRepository");
 
         insertMessage(roomId, message);
-
-        return message;
-    }
-
-    public ChatMessage saveMassage1(final Long roomId, final ChatMessage chatMessage) {
-        ChatMessage message = chatMessageRepository.save(chatMessage);
-        logger.info("save message in messageRepository");
-        insertMessage(roomId, message);
-
         return message;
     }
 
@@ -60,10 +51,7 @@ public class ChatMessageService {
         if (optionalChatRoom.isPresent()) {
             return Collections.unmodifiableList(optionalChatRoom.get().getMessageList());
         }
-
-        ChatRoom chatRoom = ChatRoom.of(roomId);
-        chatRoomRepository.save(chatRoom);
-        return Collections.unmodifiableList(new ArrayList<>());
+        throw new WebSocketBusinessException(WebSocketExceptionCode.NO_CHAT_ROOM);
     }
 
     private void insertMessage(final Long roomId, final ChatMessage entity) {
@@ -76,18 +64,7 @@ public class ChatMessageService {
         logger.info("insert message in chatRoom {}", roomId);
     }
 
-
-    public void checkExistChatRoom(final Long roomId, final ChatMessage chatMessage) {
-        if (isNotExistRoom(roomId)) {
-            logger.info("checkExistChatRoom => chatRoomId: {}", roomId);
-
-            ChatRoom chatRoom = ChatRoom.of(roomId, chatMessage);
-            chatRoomRepository.save(chatRoom);
-            logger.info("create new Room => new chatRoomId: {}", roomId);
-        }
-    }
-
-    public void checkExistChatRoom1(final Long roomId) {
+    public void checkExistChatRoom(final Long roomId) {
         if (isNotExistRoom(roomId)) {
             logger.info("checkExistChatRoom => chatRoomId: {}", roomId);
             ChatRoom chatRoom = ChatRoom.of(roomId);
