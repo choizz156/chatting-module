@@ -1,0 +1,14 @@
+spring:
+  profiles:
+    default: test
+
+logging:
+  level:
+    org.springframework.data.mongodb: debug
+
+de:
+  flapdoodle:
+    mongodb:
+      embedded:
+        version: 5.0.5
+
