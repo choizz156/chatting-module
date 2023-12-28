@@ -25,7 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/users")
 public class UserController {
 
-    private final Logger logger = LoggerFactory.getLogger("fileLog");
+    private static final Logger logger = LoggerFactory.getLogger("fileLog");
     private final UserService userService;
 
     @ResponseStatus(CREATED)

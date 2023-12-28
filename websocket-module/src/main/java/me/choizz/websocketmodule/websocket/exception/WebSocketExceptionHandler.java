@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice
 public class WebSocketExceptionHandler {
 
-    private final Logger logger = LoggerFactory.getLogger("fileLog");
+    private static final Logger logger = LoggerFactory.getLogger("fileLog");
 
     @ExceptionHandler(MongoClientException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)

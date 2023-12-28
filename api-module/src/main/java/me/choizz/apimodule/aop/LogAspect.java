@@ -17,7 +17,7 @@ import org.springframework.stereotype.Component;
 public class LogAspect {
 
     private static final String TARGET = "TARGET";
-    private final Logger logger = LoggerFactory.getLogger("fileLog");
+    private static final Logger logger = LoggerFactory.getLogger("fileLog");
 
     @Pointcut("execution(* me.choizz.apimodule.api.controller..*Controller.*(..))")
     public void controllerLog() {
@@ -29,7 +29,10 @@ public class LogAspect {
 
     @AfterReturning(value = "exceptionLog()", returning = "result")
     public void exceptionLog(JoinPoint joinpoint, Object result) {
-        logger.info("exception result => {}", result);
+        logger.info("exception joinpoint = {}, result => {}",
+            joinpoint.getSignature().getName(),
+            result
+        );
     }
 
     @Before("controllerLog()")

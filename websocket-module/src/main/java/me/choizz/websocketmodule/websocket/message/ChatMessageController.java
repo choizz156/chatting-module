@@ -26,7 +26,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class ChatMessageController {
 
-    private final Logger logger = LoggerFactory.getLogger("fileLog");
+    private static final Logger logger = LoggerFactory.getLogger("fileLog");
     private final ChatMessageService chatMessageService;
     private final SimpMessageSendingOperations operations;
 

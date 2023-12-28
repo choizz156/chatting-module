@@ -27,7 +27,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 public class ChattingPreHandler implements ChannelInterceptor {
 
     private final ObjectMapper objectMapper;
-    private final Logger logger = LoggerFactory.getLogger("fileLog");
+    private static final Logger logger = LoggerFactory.getLogger("fileLog");
 
     @Override
     public Message<?> preSend(final Message<?> message, final MessageChannel channel) {
@@ -36,7 +36,7 @@ public class ChattingPreHandler implements ChannelInterceptor {
             MessageHeaderAccessor.getAccessor(message, StompHeaderAccessor.class)
         );
         StompCommand command = getStompCommand(headerAccessor);
-        UsernamePasswordAuthenticationToken simpUser = getUser(headerAccessor);
+        UsernamePasswordAuthenticationToken simpUser = getAuthUser(headerAccessor);
 
         if (isNeedAuthenticationCommand(command)) {
             String simpSessionId = (String) headerAccessor.getHeader("simpSessionId");
@@ -84,19 +84,19 @@ public class ChattingPreHandler implements ChannelInterceptor {
         return Preconditions.checkNotNull(headerAccessor, "stomp 통신 오류 발생");
     }
 
-    private UsernamePasswordAuthenticationToken getUser
+    private UsernamePasswordAuthenticationToken getAuthUser
         (
             final StompHeaderAccessor headerAccessor
         ) {
-        UsernamePasswordAuthenticationToken simpUser = null;
         try {
-            simpUser = (UsernamePasswordAuthenticationToken) headerAccessor.getHeader("simpUser");
+            UsernamePasswordAuthenticationToken simpUser =
+                (UsernamePasswordAuthenticationToken) headerAccessor.getHeader("simpUser");
             Preconditions.checkNotNull(simpUser, "인증 되지 않은 사용자입니다.");
             Preconditions.checkArgument(simpUser.isAuthenticated(), "인증 되지 않은 사용자입니다.");
+            return simpUser;
         } catch (IllegalArgumentException e) {
             throw new AuthenticationServiceException(e.getMessage());
         }
-        return simpUser;
     }
 
     private StompCommand getStompCommand(final StompHeaderAccessor headerAccessor) {

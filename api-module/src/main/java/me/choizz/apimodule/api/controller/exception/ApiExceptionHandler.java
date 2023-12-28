@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice
 public class ApiExceptionHandler {
 
-    private final Logger logger = LoggerFactory.getLogger("fileLog");
+    private static final Logger logger = LoggerFactory.getLogger("fileLog");
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
@@ -28,7 +28,9 @@ public class ApiExceptionHandler {
     @ExceptionHandler(ApiBusinessLogicException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ApiResponseDto<ErrorResponse> businessLogicExceptionHandler(
-        ApiBusinessLogicException e) {
+        ApiBusinessLogicException e
+    ) {
+        logger.warn("ApiBusinessLogicException => {}", e.getMessage());
         return new ApiResponseDto<>(ErrorResponse.of(e.getMessage()));
     }
 

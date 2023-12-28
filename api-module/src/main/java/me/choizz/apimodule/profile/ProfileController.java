@@ -1,4 +1,4 @@
-package me.choizz.apimodule.api.controller.profile;
+package me.choizz.apimodule.profile;
 
 import java.util.List;
 import lombok.RequiredArgsConstructor;

@@ -18,7 +18,7 @@ public class LogAspect {
 
     private static final String TRACE_ID = "TRACE_ID";
     private static final String TARGET = "TARGET";
-    private final Logger logger = LoggerFactory.getLogger("fileLog");
+    private static final Logger logger = LoggerFactory.getLogger("fileLog");
 
     @Pointcut("execution(* me.choizz.websocketmodule.websocket.message..*(..))")
     public void controllerLog() {

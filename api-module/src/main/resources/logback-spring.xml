@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration debug="false">
 
-  <include resource="org/springframework/boot/logging/logback/base.xml"/>
+<!--  <include resource="org/springframework/boot/logging/logback/base.xml"/>-->
+  <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
   <include resource="logs/info-appender.xml"/>
   <include resource="logs/error-appender.xml"/>
   <include resource="logs/json-appender.xml"/>
