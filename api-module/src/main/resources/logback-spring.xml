@@ -5,6 +5,7 @@
   <include resource="logs/info-appender.xml"/>
   <include resource="logs/error-appender.xml"/>
   <include resource="logs/json-appender.xml"/>
+  <include resource="logs/warn-appender.xml"/>
 
   <springProfile name="local, test">
     <logger name="fileLog">
@@ -24,6 +25,7 @@
       <level value="INFO"/>
       <appender-ref ref="infoLog"/>
       <appender-ref ref="errorLog"/>
+      <appender-ref ref="warnLog"/>
     </logger>
 
 <!--    <logger name="jsonLog" level="INFO">-->

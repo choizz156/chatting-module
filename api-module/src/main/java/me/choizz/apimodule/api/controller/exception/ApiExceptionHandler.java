@@ -15,18 +15,20 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice
 public class ApiExceptionHandler {
 
-    private static final Logger logger = LoggerFactory.getLogger("fileLog");
+    private final Logger logger = LoggerFactory.getLogger("fileLog");
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ApiResponseDto<ErrorResponse> methodArgumentNotValidExceptionHandler(MethodArgumentNotValidException e) {
+    public ApiResponseDto<ErrorResponse> methodArgumentNotValidExceptionHandler(
+        MethodArgumentNotValidException e) {
         logger.warn("MethodArgumentNotValidException => {}", e.getBindingResult());
         return new ApiResponseDto<>(ErrorResponse.of(HttpStatus.BAD_REQUEST, e.getBindingResult()));
     }
 
     @ExceptionHandler(ApiBusinessLogicException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ApiResponseDto<ErrorResponse> businessLogicExceptionHandler(ApiBusinessLogicException e) {
+    public ApiResponseDto<ErrorResponse> businessLogicExceptionHandler(
+        ApiBusinessLogicException e) {
         return new ApiResponseDto<>(ErrorResponse.of(e.getMessage()));
     }
 
@@ -34,6 +36,7 @@ public class ApiExceptionHandler {
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ApiResponseDto<ErrorResponse> exceptionHandler(Exception e) {
         logger.warn("internal server error => {}", e.getMessage());
-        return new ApiResponseDto<>(ErrorResponse.of(HttpStatus.INTERNAL_SERVER_ERROR,"알 수 없는 오류가 발생했습니다."));
+        return new ApiResponseDto<>(
+            ErrorResponse.of(HttpStatus.INTERNAL_SERVER_ERROR, "알 수 없는 오류가 발생했습니다."));
     }
 }
