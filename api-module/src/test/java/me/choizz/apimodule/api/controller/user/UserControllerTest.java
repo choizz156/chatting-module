@@ -16,7 +16,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.ResultActions;
 
 @ActiveProfiles("test")
 @SpringBootTest
@@ -35,7 +34,7 @@ class UserControllerTest {
         //given
         JoinDto dto = new JoinDto("test@gmail.com", "testdfd11", "test");
 
-        ResultActions resultActions = mockMvc.perform(
+        mockMvc.perform(
                 post("/users")
                     .content(objectMapper.writeValueAsBytes(dto))
                     .contentType(MediaType.APPLICATION_JSON)
@@ -56,7 +55,7 @@ class UserControllerTest {
             //given
             JoinDto dto = new JoinDto("", "testdfd11", "test");
 
-            ResultActions resultActions = mockMvc.perform(
+            mockMvc.perform(
                     post("/users")
                         .content(objectMapper.writeValueAsBytes(dto))
                         .contentType(MediaType.APPLICATION_JSON)
@@ -74,7 +73,7 @@ class UserControllerTest {
             //given
             JoinDto dto = new JoinDto("resfdf.com", "testdfd11", "test");
 
-            ResultActions resultActions = mockMvc.perform(
+            mockMvc.perform(
                     post("/users")
                         .content(objectMapper.writeValueAsBytes(dto))
                         .contentType(MediaType.APPLICATION_JSON)
@@ -93,7 +92,7 @@ class UserControllerTest {
             //given
             JoinDto dto = new JoinDto("re@sfdf.com", " ", "test");
 
-            ResultActions resultActions = mockMvc.perform(
+            mockMvc.perform(
                     post("/users")
                         .content(objectMapper.writeValueAsBytes(dto))
                         .contentType(MediaType.APPLICATION_JSON)
@@ -112,7 +111,7 @@ class UserControllerTest {
             //given
             JoinDto dto = new JoinDto("re@sfdf.com", "1233", " ");
 
-            ResultActions resultActions = mockMvc.perform(
+            mockMvc.perform(
                     post("/users")
                         .content(objectMapper.writeValueAsBytes(dto))
                         .contentType(MediaType.APPLICATION_JSON)
