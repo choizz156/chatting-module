@@ -1,4 +1,4 @@
-package me.choizz;
+package me.choizz.apimodule;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.SpringApplication;
