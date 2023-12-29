@@ -20,10 +20,15 @@ repositories {
 
 dependencies {
 
+    implementation 'org.springframework.boot:spring-boot-starter'
+
     //websocket
     implementation 'org.springframework.boot:spring-boot-starter-websocket'
 
+    //mongodb
     implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
+
+    //config
     implementation 'org.springframework.security:spring-security-config'
 
     //webvalidation

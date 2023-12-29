@@ -50,6 +50,7 @@ dependencies {
     implementation project(':domain-jpa-module')
     implementation project(':websocket-module')
     implementation project(':chatting-redis-module')
+    implementation project(':chatting-mongo-module')
 }
 
 repositories {
