@@ -40,6 +40,9 @@ class UserControllerTest {
     private MockMvc mockMvc;
 
     @Autowired
+    UserService userService;
+
+    @Autowired
     private ObjectMapper objectMapper;
 
     @Autowired
@@ -149,11 +152,9 @@ class UserControllerTest {
     }
 
     @Nested
-    @DisplayName("인증 테스트")
+    @DisplayName("유저 인증 테스트")
     class AuthTest {
 
-        @Autowired
-        UserService userService;
 
         @DisplayName("로그인")
         @Test
@@ -212,6 +213,17 @@ class UserControllerTest {
                 .andDo(print());
         }
 
+
+        private void addUsers() {
+            JoinDto joinDto = new JoinDto("test@gmail.com", "1233", "test");
+            userService.join(joinDto);
+        }
+    }
+
+    @Nested
+    @DisplayName("유저 권한 테스트")
+    class AuthorizeTest {
+
         @DisplayName("로그인 유저는 권한 인증을 할 수 잇다.")
         @WithMockUser
         @Test
@@ -260,11 +272,6 @@ class UserControllerTest {
                     "Full authentication is required to access this resource")
                 )
                 .andDo(print());
-        }
-
-        private void addUsers() {
-            JoinDto joinDto = new JoinDto("test@gmail.com", "1233", "test");
-            userService.join(joinDto);
         }
     }
 }
