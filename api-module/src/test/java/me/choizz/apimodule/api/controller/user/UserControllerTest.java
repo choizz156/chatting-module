@@ -8,9 +8,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.util.stream.Stream;
 import me.choizz.apimodule.auth.dto.LoginDto;
 import me.choizz.domainjpamodule.dto.JoinDto;
-import me.choizz.domainjpamodule.user.User;
 import me.choizz.domainjpamodule.user.UserRepository;
 import me.choizz.domainjpamodule.user.UserService;
 import org.hamcrest.Matchers;
@@ -18,11 +18,15 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithAnonymousUser;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
@@ -155,8 +159,7 @@ class UserControllerTest {
         @Test
         void test4() throws Exception {
             //given
-            JoinDto joinDto = new JoinDto("test@gmail.com", "1233", "test");
-            User join = userService.join(joinDto);
+            addUsers();
 
             LoginDto loginDto = new LoginDto("test@gmail.com", "1233");
             mockMvc.perform(
@@ -182,6 +185,33 @@ class UserControllerTest {
                 .andDo(print());
         }
 
+        private static Stream<Arguments> provideWrongInfo() {
+            LoginDto wrongEmail = new LoginDto("test@gail.com", "1233");
+            LoginDto wrongPwd = new LoginDto("test@gmail.com", "12345");
+
+            return Stream.of(
+                Arguments.of(wrongEmail),
+                Arguments.of(wrongPwd)
+            );
+        }
+
+        @DisplayName("로그인 실패 시 예외를 던진다(이메일 오류, 비밀번호 오류")
+        @MethodSource("provideWrongInfo")
+        @ParameterizedTest
+        void test7(LoginDto loginDto) throws Exception {
+            //given
+            addUsers();
+
+            mockMvc.perform(
+                    post("/auth/login")
+                        .content(objectMapper.writeValueAsString(loginDto))
+                        .contentType(MediaType.APPLICATION_JSON)
+                )
+                .andExpect(status().isUnauthorized())
+                .andExpect(jsonPath("$.data.msg").value("Bad credentials"))
+                .andDo(print());
+        }
+
         @DisplayName("로그인 유저는 권한 인증을 할 수 잇다.")
         @WithMockUser
         @Test
@@ -191,6 +221,50 @@ class UserControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().string("true"))
                 .andDo(print());
+        }
+
+        @DisplayName("USER 권한이 없으면 인증을 할 수 없다. ")
+        @WithAnonymousUser
+        @Test
+        void test9() throws Exception {
+            //given
+            mockMvc.perform(get("/auth"))
+                .andExpect(status().isUnauthorized())
+                .andExpect(jsonPath("$.data.msg").value(
+                    "Full authentication is required to access this resource")
+                )
+                .andDo(print());
+        }
+
+        @DisplayName("USER 권한이 없으면 채팅 내역 조회를 할 수 없다.")
+        @WithAnonymousUser
+        @Test
+        void test11() throws Exception {
+            //given
+            mockMvc.perform(get("/messages"))
+                .andExpect(status().isUnauthorized())
+                .andExpect(jsonPath("$.data.msg").value(
+                    "Full authentication is required to access this resource")
+                )
+                .andDo(print());
+        }
+
+        @DisplayName("USER 권한이 없으면 채팅방을 만들 수 없다.")
+        @WithAnonymousUser
+        @Test
+        void test10() throws Exception {
+            //given
+            mockMvc.perform(post("/chatting-rooms"))
+                .andExpect(status().isUnauthorized())
+                .andExpect(jsonPath("$.data.msg").value(
+                    "Full authentication is required to access this resource")
+                )
+                .andDo(print());
+        }
+
+        private void addUsers() {
+            JoinDto joinDto = new JoinDto("test@gmail.com", "1233", "test");
+            userService.join(joinDto);
         }
     }
 }
