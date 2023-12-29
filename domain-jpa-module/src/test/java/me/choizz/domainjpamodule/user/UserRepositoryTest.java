@@ -2,6 +2,7 @@ package me.choizz.domainjpamodule.user;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.util.List;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -20,6 +21,8 @@ class UserRepositoryTest {
     @Autowired
     private UserRepository userRepository;
 
+    User host;
+    User client;
     @BeforeEach
     void setUpEach() {
         saveUsers();
@@ -37,8 +40,8 @@ class UserRepositoryTest {
             .password("1234")
             .build();
 
-       userRepository.save(user1);
-       userRepository.save(user2);
+       host = userRepository.save(user1);
+       client = userRepository.save(user2);
     }
 
     @AfterEach
@@ -66,5 +69,15 @@ class UserRepositoryTest {
     void existsUserByEmail() throws Exception {
         //given//when//then
         assertThat(userRepository.existsUserByEmail("test1@gmail.com")).isTrue();
+    }
+
+    @Test
+    void findUsers() throws Exception {
+        //given//when
+        List<User> users = userRepository.findUsers(client.getId(), host.getId());
+        //then
+        assertThat(users)
+            .extracting("email")
+            .contains("test1@gmail.com","test2@gmail.com");
     }
 }

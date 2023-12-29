@@ -1,6 +1,7 @@
 package me.choizz.websocketmodule.websocket.aop;
 
 import lombok.extern.slf4j.Slf4j;
+import me.choizz.websocketmodule.websocket.exception.ResponseDto;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Aspect;
@@ -40,8 +41,8 @@ public class LogAspect {
     }
 
     @AfterReturning(value = "message()", returning = "result")
-    public void message(JoinPoint joinpoint, Object result) {
-        logger.info("response::: {} result = {}", joinpoint.getSignature().getName(), result);
+    public void message(JoinPoint joinpoint, ResponseDto<?> result) {
+        logger.info("response::: {} result = {}", joinpoint.getSignature().getName(), result.time());
         MDC.clear();
     }
 

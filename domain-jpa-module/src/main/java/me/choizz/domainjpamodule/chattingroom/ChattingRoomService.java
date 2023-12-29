@@ -1,10 +1,9 @@
 package me.choizz.domainjpamodule.chattingroom;
 
+import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import me.choizz.domainjpamodule.exception.ApiBusinessLogicException;
-import me.choizz.domainjpamodule.exception.ApiExceptionCode;
 import me.choizz.domainjpamodule.user.User;
 import me.choizz.domainjpamodule.user.UserRepository;
 import org.springframework.stereotype.Service;
@@ -36,19 +35,16 @@ public class ChattingRoomService {
         return roomRepository.save(room);
     }
 
-    private Optional<ChattingRoom> checkDuplicationOfChattingRoom(final Long hostId, final Long clientId) {
+    private Optional<ChattingRoom> checkDuplicationOfChattingRoom(
+        final Long hostId,
+        final Long clientId
+    ) {
         return roomRepository.findChattingRoomByHostIdAndClientId(hostId, clientId);
     }
 
     private ChattingUser getChattingUser(final Long hostId, final Long clientId) {
-
-        User host = userRepository.findById(hostId)
-            .orElseThrow(() -> new ApiBusinessLogicException(ApiExceptionCode.NOT_FOUND_UER));
-
-        User client = userRepository.findById(clientId)
-            .orElseThrow(() -> new ApiBusinessLogicException(ApiExceptionCode.NOT_FOUND_UER));
-
-        return new ChattingUser(host, client);
+        List<User> users = userRepository.findUsers(clientId, hostId);
+        return new ChattingUser(users.get(0), users.get(1));
     }
 
     private record ChattingUser(User host, User client) {
