@@ -1,0 +1,36 @@
+spring:
+  profiles:
+    default: test
+
+  jpa:
+    show_sql: true
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate:
+        format_sql: true
+
+  datasource:
+    username: sa
+    password:
+    #    url: jdbc:h2:tcp://localhost/~/chat
+    url: jdbc:h2:mem:chattest
+    driver-class-name: org.h2.Driver
+
+  data:
+    redis:
+      host: localhost
+      password: 1234
+      port: 6371
+
+
+
+
+
+
+
+
+
+
+
+
