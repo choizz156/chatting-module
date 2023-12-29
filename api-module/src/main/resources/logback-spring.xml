@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration debug="false">
 
-<!--  <include resource="org/springframework/boot/logging/logback/base.xml"/>-->
+
   <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
   <include resource="logs/info-appender.xml"/>
   <include resource="logs/error-appender.xml"/>
@@ -22,6 +22,9 @@
 
 
   <springProfile name="prod || prod1 || prod2">
+    <include resource="org/springframework/boot/logging/logback/base.xml"/>
+    <root level="WARN">
+    </root>
     <logger name="fileLog">
       <level value="INFO"/>
       <appender-ref ref="infoLog"/>
@@ -29,9 +32,9 @@
       <appender-ref ref="warnLog"/>
     </logger>
 
-<!--    <logger name="jsonLog" level="INFO">-->
-<!--      <appender-ref ref="jsonLog"/>-->
-<!--    </logger>-->
+    <!--    <logger name="jsonLog" level="INFO">-->
+    <!--      <appender-ref ref="jsonLog"/>-->
+    <!--    </logger>-->
   </springProfile>
 
 </configuration>

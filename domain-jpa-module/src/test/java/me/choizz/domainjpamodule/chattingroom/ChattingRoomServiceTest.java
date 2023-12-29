@@ -50,8 +50,8 @@ class ChattingRoomServiceTest {
 
     @AfterEach
     void tearDown() {
-        chattingRoomRepository.deleteAll();
-        userRepository.deleteAll();
+        chattingRoomRepository.deleteAllInBatch();
+        userRepository.deleteAllInBatch();
     }
 
     @DisplayName("기존에 방이 존재하면 그 방을 리턴한다.")
@@ -81,13 +81,6 @@ class ChattingRoomServiceTest {
     @DisplayName("존재하지 않는 유저일 시 예외를 던진다.")
     @Test
     void test3() throws Exception {
-        //given
-        User user4 = User.builder()
-            .nickname("test4")
-            .email("test4@gmail.com")
-            .password("1234")
-            .build();
-
         //when//then
         assertThatThrownBy(() -> chattingRoomService.createOneToOne("test2", user1.getId(), 5L))
             .isInstanceOf(ApiBusinessLogicException.class)

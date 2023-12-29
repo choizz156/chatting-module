@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import me.choizz.domainjpamodule.user.User;
 import me.choizz.domainjpamodule.user.UserRepository;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +12,6 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
-import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 
@@ -33,6 +33,19 @@ class ChattingRoomRepositoryTest {
 
     @BeforeEach
     void setUpEach() {
+        saveUsers();
+        ChattingRoom testRoom = new ChattingRoom("testRoom");
+        testRoom.makeChattingRoom(user1, user2);
+        chattingRoomRepository.save(testRoom);
+    }
+
+    @AfterEach
+    void tearDown() {
+        chattingRoomRepository.deleteAllInBatch();
+        userRepository.deleteAllInBatch();
+    }
+
+    private void saveUsers() {
         user1 = User.builder()
             .nickname("test1")
             .email("test1@gmail.com")
@@ -46,12 +59,8 @@ class ChattingRoomRepositoryTest {
             .build();
         user1 = userRepository.save(user1);
         user2 = userRepository.save(user2);
-        ChattingRoom testRoom = new ChattingRoom("testRoom");
-        testRoom.makeChattingRoom(user1, user2);
-        chattingRoomRepository.save(testRoom);
     }
 
-    @Rollback(false)
     @Test
     void findChattingRoomByHostIdAndClientId() throws Exception {
         //given//when

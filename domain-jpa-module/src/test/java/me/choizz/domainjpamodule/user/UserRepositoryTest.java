@@ -20,9 +20,6 @@ class UserRepositoryTest {
     @Autowired
     private UserRepository userRepository;
 
-    private User host;
-    private User client;
-
     @BeforeEach
     void setUpEach() {
         saveUsers();
@@ -40,13 +37,13 @@ class UserRepositoryTest {
             .password("1234")
             .build();
 
-        host = userRepository.save(user1);
-        client = userRepository.save(user2);
+       userRepository.save(user1);
+       userRepository.save(user2);
     }
 
     @AfterEach
     void tearDown() {
-        userRepository.deleteAll();
+        userRepository.deleteAllInBatch();
     }
 
     @Test

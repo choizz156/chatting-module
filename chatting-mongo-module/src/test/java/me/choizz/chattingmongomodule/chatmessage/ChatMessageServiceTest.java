@@ -51,7 +51,8 @@ class ChatMessageServiceTest {
 
     @AfterEach
     void tearDown() {
-        chatRoomRepository.deleteById(1L);
+        chatRoomRepository.deleteAll();
+        chatMessageRepository.deleteAll();
     }
 
     @DisplayName("chatRoom 도큐먼트가 존재하지 않는다면 생성한다.")
@@ -78,14 +79,14 @@ class ChatMessageServiceTest {
 
         //then
         Optional<ChatRoom> noRoom = chatRoomRepository.findById(2L);
-        Optional<ChatRoom> chatRoom1 = chatRoomRepository.findById(1L);
+        ChatRoom chatRoom1 = chatRoomRepository.findById(1L).orElseGet(ChatRoom::new);
         List<ChatRoom> chatRooms = chatRoomRepository.findAll();
 
         assertThat(noRoom).isEmpty();
         assertThat(chatRooms).hasSize(1);
-        assertThat(chatRoom1.get().getRoomId()).isEqualTo(1L);
-        assertThat(chatRoom1.get().getMessageList()).hasSize(2);
-        assertThat(chatRoom1.get().getMessageList())
+        assertThat(chatRoom1.getRoomId()).isEqualTo(1L);
+        assertThat(chatRoom1.getMessageList()).hasSize(2);
+        assertThat(chatRoom1.getMessageList())
             .extracting(
                 "senderId", "receiverId", "senderNickname", "receiverNickname", "roomId", "content"
             )
