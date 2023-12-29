@@ -2,18 +2,20 @@ package me.choizz.domainjpamodule.dto;
 
 
 import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import me.choizz.domainjpamodule.user.User;
 import me.choizz.domainjpamodule.user.UserRole;
 
 public record JoinDto(
-    @Email
+    @Email(message = "@를 포함해야합니다.")
+    @NotEmpty(message = "이메일은 공백일 수 없습니다.")
     String email,
 
-    @NotEmpty
+    @NotBlank
     String password,
 
-    @NotEmpty
+    @NotBlank
     String nickname
 ) {
 
