@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import me.choizz.domainjpamodule.exception.ApiBusinessLogicException;
+import me.choizz.domainjpamodule.exception.ApiExceptionCode;
 import me.choizz.domainjpamodule.user.User;
 import me.choizz.domainjpamodule.user.UserRepository;
 import org.springframework.stereotype.Service;
@@ -44,7 +46,14 @@ public class ChattingRoomService {
 
     private ChattingUser getChattingUser(final Long hostId, final Long clientId) {
         List<User> users = userRepository.findUsers(clientId, hostId);
+        checkExistUsers(users);
         return new ChattingUser(users.get(0), users.get(1));
+    }
+
+    private void checkExistUsers(final List<User> users) {
+        if(users.size() != 2){
+            throw new ApiBusinessLogicException(ApiExceptionCode.NOT_FOUND_UER);
+        }
     }
 
     private record ChattingUser(User host, User client) {
