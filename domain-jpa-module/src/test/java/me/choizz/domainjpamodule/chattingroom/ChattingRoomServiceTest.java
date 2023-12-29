@@ -82,7 +82,8 @@ class ChattingRoomServiceTest {
     @Test
     void test3() throws Exception {
         //when//then
-        assertThatThrownBy(() -> chattingRoomService.createOneToOne("test2", user1.getId(), 5L))
+        Long id = user1.getId();
+        assertThatThrownBy(() -> chattingRoomService.createOneToOne("test2", id, 5L))
             .isInstanceOf(ApiBusinessLogicException.class)
             .hasMessageContaining(ApiExceptionCode.NOT_FOUND_UER.getMsg());
     }
