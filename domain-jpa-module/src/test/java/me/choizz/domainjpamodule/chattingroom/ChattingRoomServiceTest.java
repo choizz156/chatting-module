@@ -74,8 +74,8 @@ class ChattingRoomServiceTest {
             chattingRoomService.createOneToOne("testRoom2", user3.getId(), user1.getId());
         //then
         assertThat(testRoom2.getRoomName()).isEqualTo("testRoom2");
-        assertThat(testRoom2.getHost()).isEqualTo(user3);
-        assertThat(testRoom2.getClient()).isEqualTo(user1);
+        assertThat(testRoom2.getHost()).isEqualTo(user1);
+        assertThat(testRoom2.getClient()).isEqualTo(user3);
     }
 
     @DisplayName("존재하지 않는 유저일 시 예외를 던진다.")

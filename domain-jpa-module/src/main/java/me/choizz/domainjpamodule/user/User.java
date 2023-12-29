@@ -12,11 +12,10 @@ import java.util.Objects;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 import me.choizz.domainjpamodule.BaseJpaEntity;
 import org.hibernate.proxy.HibernateProxy;
 
-@ToString(of = "email")
+
 @Getter
 @NoArgsConstructor
 @Entity
