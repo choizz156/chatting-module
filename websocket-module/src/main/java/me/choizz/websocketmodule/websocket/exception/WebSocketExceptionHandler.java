@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @Slf4j
-@RestControllerAdvice
+@RestControllerAdvice(basePackages = "me.choizz.websocketmodule")
 public class WebSocketExceptionHandler {
 
     private static final Logger logger = LoggerFactory.getLogger("fileLog");
