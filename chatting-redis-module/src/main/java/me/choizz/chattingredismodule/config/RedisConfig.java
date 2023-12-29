@@ -12,7 +12,7 @@ import org.springframework.data.redis.listener.RedisMessageListenerContainer;
 import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
-@Profile("*prod*")
+@Profile("!test")
 @Configuration
 public class RedisConfig {
 
