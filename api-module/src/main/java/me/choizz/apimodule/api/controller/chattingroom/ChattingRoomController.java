@@ -1,5 +1,6 @@
 package me.choizz.apimodule.api.controller.chattingroom;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import me.choizz.apimodule.api.controller.dto.ApiResponseDto;
@@ -25,13 +26,13 @@ public class ChattingRoomController {
 
     @PostMapping
     public ApiResponseDto<ChatRoomResponseDto> createChattingRoom(
-        @RequestBody ChatRoomRequestDto requestDto
+        @RequestBody @Valid ChatRoomRequestDto requestDto
     ) {
         logger.info("chatRoomInfo => {}", requestDto);
         ChattingRoom chattingRoom = chattingRoomService.createOneToOne(
-            requestDto.getName(),
-            requestDto.getHostId(),
-            requestDto.getClientId()
+            requestDto.name(),
+            requestDto.hostId(),
+            requestDto.clientId()
         );
 
         return new ApiResponseDto<>(

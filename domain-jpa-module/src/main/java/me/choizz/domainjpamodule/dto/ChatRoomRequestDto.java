@@ -1,16 +1,16 @@
 package me.choizz.domainjpamodule.dto;
 
-import jakarta.validation.constraints.NotBlank;
-import lombok.Data;
+import jakarta.validation.constraints.NotNull;
 
-@Data
-public class ChatRoomRequestDto {
 
-    private String name;
+public record ChatRoomRequestDto(
+    String name,
 
-    @NotBlank
-    private Long hostId;
+    @NotNull
+    Long hostId,
 
-    @NotBlank
-    private Long clientId;
+    @NotNull
+    Long clientId
+) {
+
 }
