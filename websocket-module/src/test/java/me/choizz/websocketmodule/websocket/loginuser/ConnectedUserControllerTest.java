@@ -104,7 +104,7 @@ class ConnectedUserControllerTest {
         loginUsers.addLoginUser(loginUser2);
     }
 
-    @DisplayName("메시지를 전송할 수 있다.")
+    @DisplayName("로그인 유저들의 데이터를 일정 간격으로 전송할 수 있다.")
     @Test
     void test1() throws Exception {
 
@@ -117,6 +117,25 @@ class ConnectedUserControllerTest {
                 verify(connectedUserController, times(2)).getConnectedUsers());
 
         assertThat(q.poll()).hasSize(2);
+    }
+
+    @DisplayName("로그인 유저가 로그아웃 시 전송 데이터가 변한다.")
+    @Test
+    void test2() throws Exception {
+        BlockingQueue<Set<LoginUser>> q = connectStomp();
+        connectedUserController.getConnectedUsers();
+
+        await()
+            .atMost(10, TimeUnit.SECONDS)
+            .untilAsserted(() ->
+                verify(connectedUserController, times(2)).getConnectedUsers());
+
+        loginUsers.removeValue("sessionId1");
+
+        await().
+            atMost(3, TimeUnit.SECONDS)
+            .untilAsserted(() -> assertThat(q.poll()).hasSize(1));
+
     }
 
     private BlockingQueue<Set<LoginUser>> connectStomp()
@@ -140,6 +159,7 @@ class ConnectedUserControllerTest {
                 q.add((Set<LoginUser>) payload);
             }
         });
+
         return q;
     }
 
