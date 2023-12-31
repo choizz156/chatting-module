@@ -18,9 +18,7 @@ import org.springframework.messaging.simp.stomp.StompCommand;
 import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.messaging.support.ChannelInterceptor;
 import org.springframework.messaging.support.MessageHeaderAccessor;
-import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-
 
 @RequiredArgsConstructor
 @Slf4j
@@ -35,6 +33,7 @@ public class ChattingPreHandler implements ChannelInterceptor {
         StompHeaderAccessor headerAccessor = getStompHeaderAccessor(
             MessageHeaderAccessor.getAccessor(message, StompHeaderAccessor.class)
         );
+        log.error("{}", headerAccessor);
         StompCommand command = getStompCommand(headerAccessor);
         UsernamePasswordAuthenticationToken simpUser = getAuthUser(headerAccessor);
 
@@ -94,8 +93,9 @@ public class ChattingPreHandler implements ChannelInterceptor {
             Preconditions.checkNotNull(simpUser, "인증 되지 않은 사용자입니다.");
             Preconditions.checkArgument(simpUser.isAuthenticated(), "인증 되지 않은 사용자입니다.");
             return simpUser;
-        } catch (IllegalArgumentException e) {
-            throw new AuthenticationServiceException(e.getMessage());
+
+        } catch (NullPointerException | IllegalArgumentException e1) {
+            throw new MessageDeliveryException(e1.getMessage());
         }
     }
 
@@ -105,7 +105,7 @@ public class ChattingPreHandler implements ChannelInterceptor {
                 headerAccessor.getCommand(),
                 "stomp command는 null일 수 없습니다."
             );
-        } catch (IllegalArgumentException e) {
+        } catch (NullPointerException e) {
             throw new MessageDeliveryException(e.getMessage());
         }
     }

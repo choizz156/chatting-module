@@ -20,8 +20,8 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.test.context.ActiveProfiles;
 
 
-@SpringBootTest(classes = {RedisExpirationListener.class, LoginUsers.class, TestRedisConfig.class})
 @ActiveProfiles("test")
+@SpringBootTest(classes = {RedisExpirationListener.class, LoginUsers.class, TestRedisConfig.class})
 class RedisExpirationListenerTest {
 
     @Autowired
