@@ -14,7 +14,7 @@ import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerCo
 @RequiredArgsConstructor
 @Configuration
 @EnableWebSocketMessageBroker
-public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
+public class WebSocketStompConfig implements WebSocketMessageBrokerConfigurer {
 
     private final ObjectMapper objectMapper;
 
@@ -27,11 +27,11 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     @Override
     public void configureMessageBroker(final MessageBrokerRegistry registry) {
         registry.setApplicationDestinationPrefixes("/app");
-        registry.enableSimpleBroker("/queue/","/topic/");
+        registry.enableSimpleBroker("/queue/", "/topic/");
     }
 
     @Override
     public void configureClientInboundChannel(final ChannelRegistration registration) {
-       registration.interceptors(new ChattingPreHandler(objectMapper));
+        registration.interceptors(new ChattingPreHandler(objectMapper));
     }
 }

@@ -1,7 +1,9 @@
 package me.choizz.websocketmodule.websocket.dto;
 
+import lombok.Builder;
 import me.choizz.chattingmongomodule.chatmessage.ChatMessage;
 
+@Builder
 public record ChatRequestMessageDto(
     Long roomId,
     Long senderId,

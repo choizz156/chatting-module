@@ -8,6 +8,7 @@ import me.choizz.chattingmongomodule.exception.WebSocketBusinessException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
+import org.springframework.messaging.MessageDeliveryException;
 import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -37,6 +38,13 @@ public class WebSocketExceptionHandler {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public void authenticationServiceExceptionHandler(AuthenticationServiceException e) {
         logger.warn("authentication error => {}", e.getMessage());
+        ErrorResponse.of(HttpStatus.UNAUTHORIZED, "인증이 되지 않은 요청입니다.");
+    }
+
+    @ExceptionHandler(MessageDeliveryException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public void messageDeliveryException(MessageDeliveryException e) {
+        logger.warn("MessageDeliveryException error => {}", e.getMessage());
         ErrorResponse.of(HttpStatus.UNAUTHORIZED, "인증이 되지 않은 요청입니다.");
     }
 

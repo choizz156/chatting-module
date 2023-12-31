@@ -27,11 +27,14 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-validation'
 
     //redis
-    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+//    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
     implementation 'org.springframework.session:spring-session-data-redis'
 
     //jpa
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+
+    //aop
+    implementation 'org.springframework.boot:spring-boot-starter-aop'
 
     //actuator
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
@@ -41,16 +44,12 @@ dependencies {
     compileOnly 'org.projectlombok:lombok:1.18.26'
     annotationProcessor 'org.projectlombok:lombok:1.18.26'
 
-    //aop
-    implementation 'org.springframework.boot:spring-boot-starter-aop'
-
     //log
     implementation 'net.logstash.logback:logstash-logback-encoder:6.1'
 
     implementation project(':domain-jpa-module')
-    implementation project(':websocket-module')
-    implementation project(':chatting-redis-module')
     implementation project(':chatting-mongo-module')
+    implementation project(':chatting-redis-module')
 }
 
 repositories {

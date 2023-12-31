@@ -1,4 +1,4 @@
-package me.choizz.websocketmodule.websocket.loginuser;
+package me.choizz.websocketmodule.websocket.connecteduser;
 
 import java.util.Set;
 import lombok.RequiredArgsConstructor;
